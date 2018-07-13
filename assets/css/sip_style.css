@@ -1,0 +1,39 @@
+.one-edge-shadow {
+
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.login-box, .register-box {
+    padding: auto;
+
+}
+.body{
+    width: 100%;
+}
+
+.gambar-login{
+    background-image: url('/assets/images/templates/cal.png');
+    background-repeat: no-repeat;
+    position: static;
+    width: auto;
+}
+.skin-red .main-header .navbar {
+    background-color: #30bbbb!important;
+}
+
+.skin-red .main-header .logo:hover {
+    background-color: #39cccc;
+}
+.skin-red .main-header .logo {
+    background-color: #30bbbb;
+}
+.skin-red .main-header .navbar .sidebar-toggle:hover {
+    background-color: #39cccc;
+}
+.content-wrapper {
+    background-color: #ecf0f5!important;
+}
+.navbar-custom-menu > .navbar-nav > li > .dropdown-menu {
+background-color:#f39c12!important;
+
+}
