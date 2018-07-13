@@ -79,7 +79,8 @@ if (empty($results->getItems())) {
     foreach ($results->getItems() as $event) {
         $start = $event->start->dateTime;
         if (empty($start)) {
-            $start = $event->start->date;
+            
+$start = $event->start->date;
         }
         printf("%s (%s)\n", $event->getSummary(), $start);
     }
