@@ -56,8 +56,7 @@ $a_ruangan = array(
 			<li class="active">Manage Jadwal Kuliah</li>
 		</ol>
 	</section>
-
-	<!-- Main content -->
+                                                                                                                            
 	<section class="content">
 <!--		MANAGE-->
 		<div class="row">

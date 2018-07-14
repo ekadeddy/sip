@@ -176,6 +176,11 @@ class Jadwal_model extends CI_Model
             }
         }
         
+        function editJadwal()
+        {
+            
+        }
+        
         function getJadwalHarianKelas($hari,$kelas,$jam)
         {
             $query = $this->db->select('jd.JAM_KULIAH_ID as JAM_KULIAH_ID, r.RUANGAN_ID, kls.KELAS_NAMA,MATA_KULIAH_NAMA, dsn.DOSEN_NAMA, JAM_KULIAH_MULAI as JAM_MULAI, jk.JAM as JAM_JK, mk.JAM as JAM_MK')
