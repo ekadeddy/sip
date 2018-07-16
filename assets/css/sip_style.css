@@ -37,3 +37,7 @@
 background-color:#f39c12!important;
 
 }
+.email-read{
+    /*background-color: #0c0c0c!important;*/
+    background-color: rgba(243,243,243,.85)!important;
+}

@@ -102,6 +102,7 @@ class profil extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+                date_default_timezone_set('Asia/Jakarta');
 		if ( ! $this->session->userdata('logged_in') ){
 			$this->ses_data = null;
 			return redirect('login');
@@ -115,4 +116,6 @@ class profil extends CI_Controller {
 	}
 
 
+#END REGION
+        
 }

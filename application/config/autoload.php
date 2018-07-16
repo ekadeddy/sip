@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] =  array('url','file','form','date','security','string','HUserProfil','HJadwal','HHari');
+$autoload['helper'] =  array('url','file','form','date','security','string','HUserProfil','HJadwal','HHari','HNotif');
 
 /*
 | -------------------------------------------------------------------
@@ -132,4 +132,4 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('Login_model' => 'login_mdl','Kelas_model'=>'kls_mdl','Dosen_model'=> 'dosen_mdl','Profil_model' => 'profil_mdl','Admin_model' => 'admin_mdl','Jam_Kuliah_model'=>'jamkuliah_mdl','Mata_Kuliah_model' => 'mk_mdl','Jadwal_model'=>'jadwal_mdl','Ruangan_Model'=>'r_mdl','Approval_model' => 'approval_mdl');
+$autoload['model'] = array('Login_model' => 'login_mdl','Kelas_model'=>'kls_mdl','Dosen_model'=> 'dosen_mdl','Profil_model' => 'profil_mdl','Admin_model' => 'admin_mdl','Jam_Kuliah_model'=>'jamkuliah_mdl','Mata_Kuliah_model' => 'mk_mdl','Jadwal_model'=>'jadwal_mdl','Ruangan_Model'=>'r_mdl','Approval_model' => 'approval_mdl','Notif_model' =>'notif_mdl');

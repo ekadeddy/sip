@@ -51,19 +51,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 //admin
 $route['admin/dashboard'] = 'admin';
-$route['admin/manage-jadwal'] = 'admin/manageJadwalKuliahDashboard';
+$route['admin/manage/jadwal/add'] = 'admin/manageJadwalKuliahDashboard';
+$route['admin/manage/jadwal/edit'] = 'admin/manageEditJadwal';
 $route['admin/manage-jadwal/(:any)'] = 'admin/manageJadwalKuliah/$1';
 $route['admin/edit-jadwal/(:any)/(:any)'] = 'admin/manageJadwalKuliahEdit/$1/$2';
 $route['admin/ajax_edit'] = 'admin/ajax_edit_manageJadwalKuliah';
 $route['admin/save-jadwal'] = 'admin/manageJadwalKuliahSave';
-$route['admin/manage-kalender'] = 'admin/manageKalenderAkademik';
-$route['admin/manage-event'] = 'admin/manageEventPcr';
+$route['admin/manage/kalender'] = 'admin/manageKalenderAkademik';
+$route['admin/manage/event'] = 'admin/manageEventPcr';
 $route['admin/approval'] = 'admin/approvalGantiJadwal';
 $route['admin/save-approval'] = 'admin/approvalSave';
 $route['admin/ajax-approval'] = 'admin/ajaxApproval';
-$route['admin/manage'] = 'admin/manageJadwalDashboard';
-$route['admin/manage/edit/jadwal'] = 'admin/manageEditJadwal';
-$route['admin/ajax_edit_jadwal'] = 'admin/manageEditJadwal';
+$route['admin/save-edit'] = 'admin/saveEditJadwal';
+$route['admin/ajax_edit_jadwal'] = 'admin/ajax_edit_jadwal';
 
 
 
@@ -87,10 +87,11 @@ $route['dosen/save-perubahan-jadwal'] = 'dosen/simpanJadwalPerubahan';
 
 //mahasiswa
 $route['mahasiswa/dashboard'] = 'mahasiswa';
-$route['mahasiswa/jadwal-kuliah'] = 'mahasiswa/jadwalMataKuliah';
-$route['mahasiswa/jadwal-perubahan'] = 'mahasiswa/jadwalPerubahan';
-$route['mahasiswa/kalender-akademik'] = 'mahasiswa/kalenderAkademik';
-$route['mahasiswa/event-pcr'] = 'mahasiswa/eventPcr';
+$route['mahasiswa/jadwal'] = 'mahasiswa/jadwalMataKuliah';
+$route['mahasiswa/jadwal/perubahan'] = 'mahasiswa/jadwalPerubahan';
+$route['mahasiswa/kalender'] = 'mahasiswa/kalenderAkademik';
+$route['mahasiswa/event'] = 'mahasiswa/eventPcr';
+$route['mahasiswa/jadwal/perubahan/detail'] = 'mahasiswa/jadwalPerubahanDetail';
 
 
 

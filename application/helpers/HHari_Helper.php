@@ -9,6 +9,17 @@ if ( ! function_exists('HHari_Helper'))
             );
             return $hari;
         }
+        function HgetHariKuliah()
+        {
+            $hari = array('0' => '-- Pilih Jam --',
+                'senin' => 'SENIN',
+                'selasa' => 'SELASA',
+                'rabu' => 'RABU',
+                'kamis' => 'KAMIS',
+                'jumat' => 'JUMAT'
+            );
+            return $hari;
+        }
          function HgetKet($jam)
         {
              
@@ -57,7 +68,6 @@ if ( ! function_exists('HHari_Helper'))
                 return 'minggu';
             }
         }
-        
         function HgetStatusTanggal($date)
         {
             //$dt = date("Y-m-d");
@@ -75,6 +85,38 @@ if ( ! function_exists('HHari_Helper'))
                 return true;  
             }
             
+        }
+        function HgetHariIni()
+        {
+             $day = date('D');
+            if($day == 'Mon')
+            {
+                return 'senin';
+            }
+            elseif($day == 'Tue')
+            {
+                return 'selasa';
+            }
+            elseif($day == 'Wed')
+            {
+                return 'rabu';
+            }
+            elseif($day == 'Thu')
+            {
+                return 'kamis';
+            }
+            elseif($day == 'Fri')
+            {
+                return 'jumat';
+            }
+            elseif($day == 'Sat')
+            {
+                return 'sabtu';
+            }
+            elseif($day == 'Sun')
+            {
+                return 'minggu';
+            }
         }
         
        

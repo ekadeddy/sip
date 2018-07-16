@@ -3,7 +3,13 @@
 	$this->load->view('layout/admin/navbar_admin_view');
         
         //Att
-        
+ $a_iket = array(
+	'class'     => 'form-control' ,
+	'id'        => 'iket',
+	'name'      => 'iket',
+        'rows'      => '3',
+        'readonly' => 'readonly'
+    );        
 $f_attribute = array(
 	'class'     => 'form-horizontal',
 	'id'        => 'feditjadwal',
@@ -18,16 +24,28 @@ $a_dkelas = array(
         'onchange'  => 'this.form.submit()');
 $a_label =  array(
 	'class' => 'col-sm-3 control-label');
-
+$a_ijadwal = array (
+        'class' => 'form-control hidden',
+        'id' => 'ijadwal_id',
+        'name' => 'ijadwal_id'
+);
+$a_ijadwal2 = array (
+        'class' => 'form-control hidden',
+        'id' => 'ijadwal_id2',
+        'name' => 'ijadwal_id2'
+);
 //untuk modal
 $a_mkelas = array(
 	'type'  => 'text',
 	'name'  => 'ikelas',
 	'id'    => 'ikelas',
-	'value' => 'asa',
 	'class' => 'form-control',
 	'readonly' => 'readonly'
 );
+$a_dosen = array(
+	'class'     => 'form-control select2',
+	'id'        => 'ddosen',
+	'name'      => 'ddosen');
 $a_matakuliah = array(
 	'class'     => 'form-control select2',
 	'id'        => 'dmatakuliah',
@@ -36,6 +54,10 @@ $a_jam = array(
 	'class'     => 'form-control select2',
 	'id'        => 'djam',
 	'name'      => 'djam');
+$a_hari = array(
+	'class'     => 'form-control select2',
+	'id'        => 'dhari',
+	'name'      => 'dhari');
 $a_ruangan = array(
 	'type'  => 'text',
 	'name'  => 'druangan',
@@ -67,7 +89,7 @@ $a_ruangan = array(
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
-                          <?php echo form_open('admin/manage/edit/jadwal', $f_attribute); ?>
+                          <?php echo form_open('admin/manage/jadwal/edit', $f_attribute); ?>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <?php echo form_label('Program Studi','lprogramstudi',$a_label); ?>
@@ -163,8 +185,8 @@ $a_ruangan = array(
                                                            $jad->JAM_MULAI.' - '.(($jad->JAM_JK+$jad->JAM_MK)-1).':45:00</p></th>';
                                                               ?>
                                                             <span class="text-center">
-                                                                <button type="button" onclick="approvalSave()" class="btn btn-success btn-xs m-b-12"><i class='glyphicon glyphicon-pencil'></i></button>
-                                                                <button type="button"  onclick="approvalSave()" class="btn btn-danger btn-xs m-b-12"><i class='glyphicon glyphicon-remove'></i></button>
+                                                                <button type="button" onclick="editJadwal('<?= $jad->JADWAL_ID ?>','<?= $hari[$j] ?>','S')" class="btn btn-success btn-xs m-b-12"><i class='glyphicon glyphicon-pencil'></i></button>
+                                                                <button type="button" onclick="editJadwal('<?= $jad->JADWAL_ID ?>','<?= $hari[$j] ?>','D')" class="btn btn-danger btn-xs m-b-12"><i class='glyphicon glyphicon-remove'></i></button>
                                                             </span>
                                                             
                                                               <?php
@@ -249,17 +271,29 @@ $a_ruangan = array(
                                }
                                    ?>
                           </table>
-                                
-                                <?php echo form_submit('btnSave', 'Simpan', 'class="btn btn-success pull-right"') ?>
                                 <?php echo form_close() ?>
                             </div>
             <!-- /.box-body -->
                     </div>
                     </div>
+                       
                     
                     
 		</div> <!-- End Row -->
-
+                </div>
+            <?php if( $feedback = $this->session->flashdata('feedback')):
+                                                           $feedback_class = $this->session->flashdata('feedback_class');
+                                                           ?>
+                                                           <div class="row">
+                                                                   <div class="col-lg-4"></div>
+                                                                   <div class="col-lg-4">
+                                                                           <div class="alert alert-dismissible text-center <?= $feedback_class ?> ">
+                                                                                   <?= $feedback ?>
+                                                                           </div>
+                                                                   </div>
+                                                                   <div class="col-lg-4"></div>
+                                                           </div>
+                                   <?php endif; ?>
 	</section>
 	<!-- /.content -->
 </div>
@@ -270,10 +304,15 @@ $a_ruangan = array(
 
 <script src="<?php echo base_url('/assets/js/JS_admin_edit_jadwal.js') ?>"></script>
        
- <div class="modal fade" id="modal-default">
+ <div class="modal fade" id="modal-simpan">
           <div class="modal-dialog">
             <div class="modal-content">
-              <?php echo form_open('admin/save-approval', $f_attribute); ?>
+              <?php echo form_open('admin/save-edit', $f_attribute); 
+                    //hidden form
+                   
+                   //end hidden form
+              ?>
+              
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span></button>
@@ -288,9 +327,13 @@ $a_ruangan = array(
                         <label>Kelas</label>
                     </div> 
                     <div class="col-lg-12"> 
-                       <?php echo form_input($a_mkelas); ?>
+                       <?php echo form_input($a_mkelas); 
+                       
+                       echo form_input($a_ijadwal); 
+                       ?>
                     </div> 
                  </div>
+                  
                 <div class="form-group">
                     <div class="col-lg-12">
                         <label>Mata Kuliah</label>
@@ -300,7 +343,27 @@ $a_ruangan = array(
                        
                     </div> 
                 </div>
+                  
+                <div class="form-group">
+                    <div class="col-lg-12">
+                        <label>Dosen</label>
+                    </div> 
+                    <div class="col-lg-12"> 
+                       <?php echo form_dropdown('ddosen', $dosen, 'pilih',$a_dosen); ?>
+                       
+                    </div> 
+                </div>
                   <div class="form-group">
+                    <div class="col-lg-12">
+                        <label>Hari</label>
+                    </div> 
+                    <div class="col-lg-12"> 
+                        <?php 
+                        $dhari_array = array('senin','selasa');
+                        echo form_dropdown('dhari', $dhari, '0',$a_hari); ?>
+                    </div> 
+                </div>
+                <div class="form-group">
                     <div class="col-lg-12">
                         <label>Jam</label>
                     </div> 
@@ -319,7 +382,62 @@ $a_ruangan = array(
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <?php echo form_submit('btnSave', 'Simpan', 'id="btnSave" class="btn btn-success"') ?>
+                <?php 
+                echo form_submit('btnSave', 'Simpan', 'id="btnSave" class="btn btn-success"'); 
+                //echo form_submit('btnSave', 'Delete', 'id="btnSave" class="btn btn-success hidden"'); 
+                ?>
+                <?php echo form_close() ?>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+</div>
+
+<!--Modal Delete-->
+ <div class="modal fade" id="modal-delete">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <?php echo form_open('admin/save-edit', $f_attribute); 
+                    //hidden form
+                   
+                   //end hidden form
+              ?>
+              
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center">Form Hapus Jadwal</h4>
+              </div>
+              <div class="modal-body">
+                   <div class="form-group">
+                    <div class="col-lg-12">
+                        <label class="text-red">PERINGATAN ! </label>
+                    </div> 
+                    <div class="col-lg-12"> 
+                        <p> Apakah anda yakin ingin menghapus Jadwal ini?</p>
+                       <?php
+                        
+                       echo form_input($a_ijadwal2); 
+                       ?>
+                    </div> 
+                 </div>
+                
+  <div class="form-group">
+                    <div class="col-lg-12">
+                        <label>Detail :</label>
+                    </div> 
+                    <div class="col-lg-12"> 
+                        <?php echo form_textarea($a_iket); ?>
+                    </div> 
+                    <div class="col-sm-2"> </div> 
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <?php 
+                echo form_submit('btnSave', 'Hapus', 'id="btnSave" class="btn btn-danger"'); 
+                ?>
                 <?php echo form_close() ?>
               </div>
             </div>

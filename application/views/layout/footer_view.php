@@ -110,3 +110,9 @@
 </body>
 
 </html>
+
+<?php
+if ($this->ses_data['user_akses'] == 'Mahasiswa'):
+ ?>
+<script src="<?php echo base_url('/assets/js/JS_mahasiswa_read_notif.js') ?>"></script>
+<?php endif; ?>

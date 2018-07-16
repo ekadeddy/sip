@@ -23,104 +23,58 @@
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     <!-- Messages: style can be found in dropdown.less-->
-                    <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-envelope-o"></i>
-                            <span class="label label-success">4</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="header">You have 4 messages</li>
-                            <li>
-                                <!-- inner menu: contains the actual data -->
-                                <ul class="menu">
-                                    <li><!-- start message -->
-                                        <a href="#">
-                                            <div class="pull-left">
-                                                <img src="<?=  base_url('assets/templates/AdminLTE-2.4.3/dist/img/user2-160x160.jpg') ?>" class="img-circle" alt="User Image">
-                                            </div>
-                                            <h4>
-                                                Perubahan Jadwal
-                                                <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                                            </h4>
-                                            <p>Matakuliah Kewarganegaraan hari ini dibatalakn</p>
-                                        </a>
-                                    </li>
-                                    <li><!-- start message -->
-                                        <a href="#">
-                                            <div class="pull-left">
-                                                <img src="<?=  base_url($user_image) ?>" class="img-circle" alt="User Image">
-                                            </div>
-                                            <h4>
-                                                Perubahan Jadwal
-                                                <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                                            </h4>
-                                            <p>Matakuliah English hari ini dibatalakan</p>
-                                        </a>
-                                    </li>
-                                    <li><!-- start message -->
-                                        <a href="#">
-                                            <div class="pull-left">
-                                                <img src="<?=  base_url($user_image) ?>" class="img-circle" alt="User Image">
-                                            </div>
-                                            <h4>
-                                                Perubahan Jadwal
-                                                <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                                            </h4>
-                                            <p>Matakuliah English hari ini dibatalakan</p>
-                                        </a>
-                                    </li>
-                                    <li><!-- start message -->
-                                        <a href="#">
-                                            <div class="pull-left">
-                                                <img src="<?=  base_url($user_image) ?>" class="img-circle" alt="User Image">
-                                            </div>
-                                            <h4>
-                                                Perubahan Jadwal
-                                                <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                                            </h4>
-                                            <p>Matakuliah English hari ini dibatalakan</p>
-                                        </a>
-                                    </li>
-                                    <!-- end message -->
-                                </ul>
-                            </li>
-                            <li class="footer"><a href="#">See All Messages</a></li>
-                        </ul>
-                    </li>
+
                     <!-- Notifications: style can be found in dropdown.less -->
                     <li class="dropdown notifications-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-bell-o"></i>
-                            <span class="label label-warning">10</span>
+                                <?php 
+                                $user = $this->ses_data['user_email'];
+                                $jumlahNotif = jumlahNotifUnread($user); 
+                                
+                                if($jumlahNotif>0):?>
+                                <span class="label label-warning"><?= $jumlahNotif ?></span>
+                                <?php endif; ?>
+                            
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">Anda Memiliki 4 Notifikasi</li>
+                            <li class="header">Anda Memiliki <?= jumlahNotifUnread($user) ?> Notifikasi belum dibaca</li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-users text-aqua"></i> Matakuliah English hari ini dibatalakn
+                                    <?php 
+                                    $notifUnread = notifUnread($user);
+                                    $f_attribute = array(
+                                    'class'     => 'form-horizontal hidden',
+                                    'id'        => 'freaddetail',
+                                    'name'      => 'freaddetail');
+                                    $a_ijadwal_ganti_id = array (
+                                      'class' => 'form-control hidden',
+                                      'id' => 'ijadwal_ganti_id',
+                                      'name' => 'ijadwal_ganti_id');
+
+                                    
+                                    echo form_open('mahasiswa/jadwal/perubahan/detail', $f_attribute); 
+                                    echo form_input($a_ijadwal_ganti_id); 
+                                    echo form_close();
+                                     
+                                    foreach ($notifUnread as $row)
+                                    {?>
+                                    <li>                
+                                          <a href="#" onclick="readNotif('<?= $row->JADWAL_GANTI_ID ?>')">
+                                            <i class="fa fa-users text-aqua"></i>Perubahan Jadwal Matakuliah <?= $row->MATA_KULIAH_NAMA ?>
                                         </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-users text-aqua"></i> Matakuliah Kewarganegaraan hari ini dibatalakn
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-users text-aqua"></i> Matakuliah B.Indo hari ini dibatalakn
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-users text-aqua"></i> Matakuliah Alpro hari ini dibatalakn
-                                        </a>
-                                    </li>
+                                    </li> 
+                                    
+                                    <?php 
+                                    }
+                                    
+                                    ?>
+                                    
+                                    
                                 </ul>
                             </li>
-                            <li class="footer"><a href="#">View all</a></li>
+                            <li class="footer"><a href="<?= base_url('mahasiswa/jadwal/perubahan')?>">View all</a></li>
                         </ul>
                     </li>
                     <!-- User Account: style can be found in dropdown.less -->
@@ -178,23 +132,23 @@
             <ul class="sidebar-menu" data-widget="tree">
                 <li class="header">MAIN NAVIGATION</li>
                 <li>
-                    <a href="<?= base_url('mahasiswa/jadwal-kuliah')?>">
+                    <a href="<?= base_url('mahasiswa/jadwal')?>">
                         <i class="fa fa-calendar"></i> <span>Jadwal Mata Kuliah</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('mahasiswa/kalender-akademik')?>">
+                    <a href="<?= base_url('mahasiswa/kalender')?>">
                         <i class="fa fa-calendar-plus-o"></i> <span>Kalender Akademik</span>
 
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('mahasiswa/event-pcr')?>">
+                    <a href="<?= base_url('mahasiswa/event')?>">
                         <i class="fa fa-calendar-check-o"></i> <span>Event PCR</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('mahasiswa/jadwal-perubahan')?>">
+                    <a href="<?= base_url('mahasiswa/jadwal/perubahan')?>">
                         <i class="fa fa-bell-o"></i> <span>Perubahan Jadwal</span>
                     </a>
                 </li>

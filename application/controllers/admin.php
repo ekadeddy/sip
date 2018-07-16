@@ -44,6 +44,17 @@ class admin extends CI_Controller {
             $data['kls'] = $kls;
             $data['progstudi'] = $progstudi;
             
+            
+            //DOsen
+            $dosen = $this->dosen_mdl->getAllDosen();
+            $data_dosen=array('0'=> '--pilih--');
+            foreach($dosen as $row)
+            {
+                    $data_dosen[$row->DOSEN_ID] = $row->DOSEN_NAMA;
+            }
+            $data['dosen'] = $data_dosen;
+            
+            
             //prog studi
             if ($progstudi != '')
             {
@@ -86,17 +97,22 @@ class admin extends CI_Controller {
             }
             $data['kelas'] = $data_kls;
 
-
-            $data['hari']= 'senin';
+//            $AllDay =HgetHariKuliah();
+//            $data_hari = array('0'=> '--pilih Hari--');
+//            for ($i=0; $i < count($AllDay); $i++)
+//            {
+//                $data_hari[$AllDay[]]
+//            }
+            $data['dhari']= HgetHariKuliah();
 
             //matakuliah
-		$matakuliah = $this->mk_mdl->getAllMataKuliah();
-		$data_mk = array('0'=> '--pilih Mata Kuliah--');
-		foreach($matakuliah as $row)
-		{
-			$data_mk[$row->MATA_KULIAH_ID] = $row->MATA_KULIAH_NAMA.' - '.$row->STATUS;
-		}
-		$data['matakuliah'] = $data_mk;
+            $matakuliah = $this->mk_mdl->getAllMataKuliah();
+            $data_mk = array('0'=> '--pilih Mata Kuliah--');
+            foreach($matakuliah as $row)
+            {
+                    $data_mk[$row->MATA_KULIAH_ID] = $row->MATA_KULIAH_NAMA.' - '.$row->STATUS;
+            }
+            $data['matakuliah'] = $data_mk;
             
             //jam
             $jam = $this->jamkuliah_mdl->getAllJamKuliah();
@@ -123,10 +139,62 @@ class admin extends CI_Controller {
                 
             $this->load->view('pages/admin/admin_mng_edit_jadwal_view',$data);
 	}
+        function saveEditJadwal()
+        {
+            $btnAction = $this->input->post('btnSave');
+            $data_jadwal = array('MATA_KULIAH_ID' => $this->input->post('dmatakuliah'),
+                'JAM_KULIAH_ID' => $this->input->post('djam'),
+                'RUANGAN_ID' => $this->input->post('druangan'),
+                'DOSEN_ID' => $this->input->post('ddosen'),
+                'HARI' => $this->input->post('dhari'),
+                'RUANGAN_ID' => $this->input->post('druangan'),
+                'DTMUPD' => date('Y-m-d H:i:s')
+                );
+            
+            
+            if($btnAction == 'Simpan')
+            {
+            $where = $this->input->post('ijadwal_id');
+            $this->_flashAndRedirect(
+			$this->jadwal_mdl->updateJadwal($data_jadwal,$where),'Jadwal Berhasil di Ubah','Gagal Mengubah Jadwal','SAVEEDITJADWAL',''
+		);  
+            }
+            elseif($btnAction == 'Hapus')
+            {
+                $where = $this->input->post('ijadwal_id2');
+                $this->_flashAndRedirect(
+			$this->jadwal_mdl->delJadwal($where),'Jadwal Berhasil di Hapus','Gagal Menghapus Jadwal','SAVEEDITJADWAL',''
+		); 
+            }
+        }
         
         function ajax_edit_jadwal()
         {
+            $cek = $this->input->post('cek');
+            $jadwal_id = $this->input->post('jadwal_id');
             
+            if($cek == "cekEditJadwal")
+		{
+			$jadwal = $this->jadwal_mdl->getJadwalByJadwalId($jadwal_id);
+			foreach($jadwal as $row)
+			{
+				$data_jadwal = array (
+                                    'dosen_id' => $row->DOSEN_ID,
+                                    'mata_kuliah_id' => $row->MATA_KULIAH_ID,
+                                    'jam' => $row->JAM_KULIAH_ID,
+                                    'ruangan_id' => $row->RUANGAN_ID,
+                                    'hari' => strtolower($row->HARI),
+                                    'kelas_id' => $row->KELAS_ID,
+                                    'jadwal_id' => $row->JADWAL_ID
+                                    
+                                );
+			}
+			echo json_encode($data_jadwal);
+		}
+		else
+		{
+
+		}
         }
                 function manageJadwalKuliah($smt)
 	{
@@ -397,6 +465,7 @@ class admin extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+                date_default_timezone_set('Asia/Jakarta');
 		if ( ! $this->session->userdata('logged_in') ){
 			$this->ses_data = null;
 			return redirect('logout');

@@ -16,6 +16,16 @@ if ( ! function_exists('HJadwal_Helper'))
             {
                 redirect('admin/approval', 'refresh');
             }
+            elseif($modul == 'SAVEEDITJADWAL')
+            {
+                redirect('admin/manage/jadwal/edit', 'refresh');
+            }
+            elseif($modul == 'READNOTIF')
+            {
+                redirect('admin/manage/jadwal/edit', 'refresh');
+            }
+            
+                
         }
 
         function HJadwalHarianDosen($hari,$dosen,$jam)

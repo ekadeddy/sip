@@ -132,19 +132,27 @@ $user_nama = $getdata['user_nama'];
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu" data-widget="tree">
                 <li class="header">MAIN NAVIGATION</li>
-                <li>
-                    <a href="<?= base_url('admin/manage')?>">
-                        <i class="fa fa-calendar"></i> <span>Manage Jadwal Kuliah</span>
+                <li class="treeview">
+                    <a href="#">
+                      <i class="fa fa-laptop"></i>
+                      <span>Manage Jadwal Kuliah</span>
+                      <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                      </span>
                     </a>
-                </li>
+                    <ul class="treeview-menu">
+                      <li><a href="<?= base_url('admin/manage/jadwal/add')?>"><i class="fa fa-circle-o"></i> Add</a></li>
+                      <li><a href="<?= base_url('admin/manage/jadwal/edit')?>"><i class="fa fa-circle-o"></i> Edit/Delete</a></li>
+                    </ul>
+                </li> 
                 <li>
-                    <a href="<?= base_url('admin/manage-kalender')?>">
+                    <a href="<?= base_url('admin/manage/kalender')?>">
                         <i class="fa fa-calendar-plus-o"></i> <span>Manage Kalender Akademik</span>
 
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('admin/manage-event')?>">
+                    <a href="<?= base_url('admin/manage/event')?>">
                         <i class="fa fa-calendar-check-o"></i> <span>Manage Event PCR</span>
                     </a>
                 </li>
@@ -153,6 +161,7 @@ $user_nama = $getdata['user_nama'];
                         <i class="fa fa-calendar-check-o"></i> <span>Approval Ganti Jadawal</span>
                     </a>
                 </li>
+                
             </ul>
         </section>
         <!-- /.sidebar -->

@@ -29,7 +29,7 @@ $(function () {
 					alert('Error get data from ajax');
 				}
 			}
-		)
+		);
 
 
 	});

@@ -19,6 +19,13 @@ class Jadwal_model extends CI_Model
 		return $query->result();
 	}
         
+        function getJadwalByJadwalId($where)
+        {
+            $query = $this->db->select('*')
+                    ->where('JADWAL_ID',$where)
+                    ->get('tb_jadwal');
+            return $query->result();
+        }
         //ambil jadwal by dosen, kelas dan matkul
         function getJadwalBy($dosen,$kelas,$matakuliah)
         {
@@ -57,7 +64,6 @@ class Jadwal_model extends CI_Model
             
             return $query->result();
         }
-
         function getApprovalData()
         {
             $date_now = date('Y-m-d');
@@ -73,9 +79,7 @@ class Jadwal_model extends CI_Model
             
             return $query->result();
         }
-        
         //ambil jadwal by dosen, kelas, matkul dan hari
-          
 	function getLastId()
 	{
 		$query = $this->db->select_max('JADWAL_ID')
@@ -83,7 +87,6 @@ class Jadwal_model extends CI_Model
 			->row();
 		return $query->JADWAL_ID;
 	}
-        
         function getLastIdJadwalGanti()
         {
             $query = $this->db->select_max('JADWAL_GANTI_ID')
@@ -91,6 +94,144 @@ class Jadwal_model extends CI_Model
 			->row();
 		return $query->JADWAL_GANTI_ID;
         }
+        function getJadwalHarianMahasiswa($hari,$mahasiswa,$jam)
+        {
+            $query = $this->db->select('jd.JAM_KULIAH_ID as JAM_KULIAH_ID, r.RUANGAN_ID, kls.KELAS_NAMA,MATA_KULIAH_NAMA, mhs.MAHASISWA_NAMA, JAM_KULIAH_MULAI as JAM_MULAI, jk.JAM as JAM_JK, mk.JAM as JAM_MK')
+                    ->from('tb_mata_kuliah mk')
+                    ->join('tb_jadwal jd','mk.MATA_KULIAH_ID = jd.MATA_KULIAH_ID')
+                    ->join('tb_jam_kuliah jk','jd.JAM_KULIAH_ID = jk.JAM_KULIAH_ID')
+                    ->join('tb_kelas kls','jd.KELAS_ID = kls.KELAS_ID')
+                    ->join('tb_mahasiswa mhs','kls.KELAS_ID = mhs.KELAS_ID')
+                    ->join('tb_ruangan r','jd.RUANGAN_ID = r.RUANGAN_ID')
+                    ->where('jd.HARI',$hari)
+                    ->where('mhs.EMAIL',$mahasiswa)
+                    ->where('jd.JAM_KULIAH_ID',$jam)
+                    ->order_by('jd.JAM_KULIAH_ID','asc')
+                    ->get();
+            
+//            print ('asa');
+//            exit;
+            
+            if($query->num_rows() > 0)
+            {
+                return $query->result();
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
+        function getJadwalGanti($email)
+        {
+            $query = $this->db->select('jdg.KET, jk.JAM as JAM_JK, mk.JAM as JAM_MK, jk.JAM_KULIAH_MULAI as JAM_MULAI, jd.JADWAL_ID, jdg.JADWAL_GANTI_ID, jdg.TANGGAL, dsn.DOSEN_NAMA, kls.KELAS_NAMA, r.RUANGAN_ID, jdg.HARI, jdg.JAM_KULIAH_ID, mk.JAM, mk.STATUS, mk.MATA_KULIAH_NAMA')
+                    ->from('tb_jadwal_ganti jdg')
+                    ->join('tb_jadwal_approval jda','jdg.JADWAL_GANTI_ID = jda.JADWAL_GANTI_ID')
+                    ->join('tb_jadwal jd','jdg.JADWAL_ID = jd.JADWAL_ID')
+                    ->join('tb_mata_kuliah mk','jd.MATA_KULIAH_ID = mk.MATA_KULIAH_ID')
+                    ->join('tb_dosen dsn','jd.DOSEN_ID = dsn.DOSEN_ID')
+                    ->join('tb_jam_kuliah jk','jdg.JAM_KULIAH_ID = jk.JAM_KULIAH_ID')
+                    ->join('tb_kelas kls','jd.KELAS_ID = kls.KELAS_ID')
+                    ->join('tb_ruangan r','jdg.RUANGAN_ID = r.RUANGAN_ID')
+                    ->join('tb_mahasiswa mhs','kls.KELAS_ID = mhs.KELAS_ID')
+                    ->where('jda.APPROVAL_STATUS','Y')
+                    ->where('jdg.TANGGAL >=', date('Y-m-d'))
+                    ->where('mhs.EMAIL', $email)
+                    ->get();
+            return $query->result();
+        }
+        function getJadwalGantiDetail($email,$jadwal_ganti_id)
+        {
+            $query = $this->db->select('dsn.DOSEN_INISIAL, mk.STATUS,jdg.KET, jk.JAM as JAM_JK, mk.JAM as JAM_MK, jk.JAM_KULIAH_MULAI as JAM_MULAI, jd.JADWAL_ID, jdg.JADWAL_GANTI_ID, jdg.TANGGAL, dsn.EMAIL, dsn.DOSEN_NAMA, kls.KELAS_NAMA, r.RUANGAN_ID, jdg.HARI, jdg.JAM_KULIAH_ID, mk.JAM, mk.STATUS, mk.MATA_KULIAH_NAMA')
+                    ->from('tb_jadwal_ganti jdg')
+                    ->join('tb_jadwal_approval jda','jdg.JADWAL_GANTI_ID = jda.JADWAL_GANTI_ID')
+                    ->join('tb_jadwal jd','jdg.JADWAL_ID = jd.JADWAL_ID')
+                    ->join('tb_mata_kuliah mk','jd.MATA_KULIAH_ID = mk.MATA_KULIAH_ID')
+                    ->join('tb_dosen dsn','jd.DOSEN_ID = dsn.DOSEN_ID')
+                    ->join('tb_jam_kuliah jk','jdg.JAM_KULIAH_ID = jk.JAM_KULIAH_ID')
+                    ->join('tb_kelas kls','jd.KELAS_ID = kls.KELAS_ID')
+                    ->join('tb_ruangan r','jdg.RUANGAN_ID = r.RUANGAN_ID')
+                    ->join('tb_mahasiswa mhs','kls.KELAS_ID = mhs.KELAS_ID')
+                    ->where('jda.APPROVAL_STATUS','Y')
+                    ->where('jdg.TANGGAL >=', date('Y-m-d'))
+                    ->where('jdg.JADWAL_GANTI_ID', $jadwal_ganti_id)
+                    ->where('mhs.EMAIL', $email)
+                    ->get();
+            return $query->result();
+        }
+        function getJadwalHarianDosen($hari,$dosen,$jam)
+        {
+            $query = $this->db->select('jd.JAM_KULIAH_ID as JAM_KULIAH_ID, r.RUANGAN_ID, kls.KELAS_NAMA,MATA_KULIAH_NAMA, dsn.DOSEN_NAMA, JAM_KULIAH_MULAI as JAM_MULAI, jk.JAM as JAM_JK, mk.JAM as JAM_MK')
+                    ->from('tb_mata_kuliah mk')
+                    ->join('tb_jadwal jd','mk.MATA_KULIAH_ID = jd.MATA_KULIAH_ID')
+                    ->join('tb_dosen dsn','jd.DOSEN_ID = dsn.DOSEN_ID')
+                    ->join('tb_jam_kuliah jk','jd.JAM_KULIAH_ID = jk.JAM_KULIAH_ID')
+                    ->join('tb_kelas kls','jd.KELAS_ID = kls.KELAS_ID')
+                    ->join('tb_ruangan r','jd.RUANGAN_ID = r.RUANGAN_ID')
+                    ->where('jd.HARI',$hari)
+                    ->where('dsn.EMAIL',$dosen)
+                    ->where('jd.JAM_KULIAH_ID',$jam)
+                    ->order_by('jd.JAM_KULIAH_ID','asc')
+                    ->get();
+            if($query->num_rows() > 0)
+            {
+                return $query->result();
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
+         function getJadwalHarianKelas($hari,$kelas,$jam)
+        {
+            $query = $this->db->select('jd.JADWAL_ID,jd.JAM_KULIAH_ID as JAM_KULIAH_ID, r.RUANGAN_ID, kls.KELAS_NAMA,MATA_KULIAH_NAMA, dsn.DOSEN_NAMA, JAM_KULIAH_MULAI as JAM_MULAI, jk.JAM as JAM_JK, mk.JAM as JAM_MK')
+                    ->from('tb_mata_kuliah mk')
+                    ->join('tb_jadwal jd','mk.MATA_KULIAH_ID = jd.MATA_KULIAH_ID')
+                    ->join('tb_dosen dsn','jd.DOSEN_ID = dsn.DOSEN_ID')
+                    ->join('tb_jam_kuliah jk','jd.JAM_KULIAH_ID = jk.JAM_KULIAH_ID')
+                    ->join('tb_kelas kls','jd.KELAS_ID = kls.KELAS_ID')
+                    ->join('tb_ruangan r','jd.RUANGAN_ID = r.RUANGAN_ID')
+                    ->where('jd.HARI',$hari)
+                    ->where('kls.KELAS_ID',$kelas)
+                    ->where('jd.JAM_KULIAH_ID',$jam)
+                    ->order_by('jd.JAM_KULIAH_ID','asc')
+                    ->get();
+            if($query->num_rows() > 0)
+            {
+                return $query->result();
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
+        function getJadwalHarianDosen2($hari,$dosen,$jam)
+               {
+                   $query = $this->db->query("SELECT jd.JAM_KULIAH_ID as JAM_KULIAH_ID, r.RUANGAN_ID, kls.KELAS_NAMA,MATA_KULIAH_NAMA, dsn.DOSEN_NAMA, JAM_KULIAH_MULAI as JAM_MULAI, CONCAT(jk.JAM+mk.JAM-1,':45:00') as JAM_SELESAI, mk.JAM as JAM_MK  
+                            FROM tb_mata_kuliah mk
+                            INNER join tb_jadwal jd on mk.MATA_KULIAH_ID = jd.MATA_KULIAH_ID
+                            INNER JOIN tb_dosen dsn on jd.DOSEN_ID = dsn.DOSEN_ID
+                            INNER JOIN tb_jam_kuliah jk on jd.JAM_KULIAH_ID = jk.JAM_KULIAH_ID
+                            INNER JOIN tb_kelas kls on jd.KELAS_ID = kls.KELAS_ID
+                            INNER JOIN tb_ruangan r on jd.RUANGAN_ID = r.RUANGAN_ID
+                            WHERE jd.HARI = '$hari'
+                            and  dsn.EMAIL = '$dosen'
+                            and jk.JAM_KULIAH_ID = '$jam'
+                            order by jd.JAM_KULIAH_ID asc");
+                  // return $query->result();
+                   
+                    
+                   if($query->num_rows() > 0)
+                   {
+                       return $query->result();
+                   }
+                   else
+                   {
+                       return false;
+                   }
+               }
         
         function saveJadwal($data)
 	{
@@ -123,111 +264,42 @@ class Jadwal_model extends CI_Model
             }
         }
                 
-        function getJadwalHarianMahasiswa($hari,$mahasiswa,$jam)
+        
+        
+        function updateJadwal($data,$where)
         {
-            $query = $this->db->select('jd.JAM_KULIAH_ID as JAM_KULIAH_ID, r.RUANGAN_ID, kls.KELAS_NAMA,MATA_KULIAH_NAMA, mhs.MAHASISWA_NAMA, JAM_KULIAH_MULAI as JAM_MULAI, jk.JAM as JAM_JK, mk.JAM as JAM_MK')
-                    ->from('tb_mata_kuliah mk')
-                    ->join('tb_jadwal jd','mk.MATA_KULIAH_ID = jd.MATA_KULIAH_ID')
-                    ->join('tb_jam_kuliah jk','jd.JAM_KULIAH_ID = jk.JAM_KULIAH_ID')
-                    ->join('tb_kelas kls','jd.KELAS_ID = kls.KELAS_ID')
-                    ->join('tb_mahasiswa mhs','kls.KELAS_ID = mhs.KELAS_ID')
-                    ->join('tb_ruangan r','jd.RUANGAN_ID = r.RUANGAN_ID')
-                    ->where('jd.HARI',$hari)
-                    ->where('mhs.EMAIL',$mahasiswa)
-                    ->where('jd.JAM_KULIAH_ID',$jam)
-                    ->order_by('jd.JAM_KULIAH_ID','asc')
-                    ->get();
+            $this->db->where('JADWAL_ID', $where)
+		->update('tb_jadwal', $data);
             
-//            print ('asa');
-//            exit;
-            
-            if($query->num_rows() > 0)
-            {
-                return $query->result();
-            }
-            else
-            {
-                return false;
-            }
-            
+		if ($this->db->affected_rows() > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
         }
         
-        function getJadwalHarianDosen($hari,$dosen,$jam)
+        function delJadwal($where)
         {
-            $query = $this->db->select('jd.JAM_KULIAH_ID as JAM_KULIAH_ID, r.RUANGAN_ID, kls.KELAS_NAMA,MATA_KULIAH_NAMA, dsn.DOSEN_NAMA, JAM_KULIAH_MULAI as JAM_MULAI, jk.JAM as JAM_JK, mk.JAM as JAM_MK')
-                    ->from('tb_mata_kuliah mk')
-                    ->join('tb_jadwal jd','mk.MATA_KULIAH_ID = jd.MATA_KULIAH_ID')
-                    ->join('tb_dosen dsn','jd.DOSEN_ID = dsn.DOSEN_ID')
-                    ->join('tb_jam_kuliah jk','jd.JAM_KULIAH_ID = jk.JAM_KULIAH_ID')
-                    ->join('tb_kelas kls','jd.KELAS_ID = kls.KELAS_ID')
-                    ->join('tb_ruangan r','jd.RUANGAN_ID = r.RUANGAN_ID')
-                    ->where('jd.HARI',$hari)
-                    ->where('dsn.EMAIL',$dosen)
-                    ->where('jd.JAM_KULIAH_ID',$jam)
-                    ->order_by('jd.JAM_KULIAH_ID','asc')
-                    ->get();
-            if($query->num_rows() > 0)
-            {
-                return $query->result();
-            }
-            else
-            {
-                return false;
-            }
+            $this->db->where('JADWAL_ID',$where)
+                    ->delete('tb_jadwal');
+            	if ($this->db->affected_rows() > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
         }
+        public function __construct()
+	{
+		parent::__construct();
+                date_default_timezone_set('Asia/Jakarta');
+	}
         
-        function editJadwal()
-        {
-            
-        }
-        
-        function getJadwalHarianKelas($hari,$kelas,$jam)
-        {
-            $query = $this->db->select('jd.JAM_KULIAH_ID as JAM_KULIAH_ID, r.RUANGAN_ID, kls.KELAS_NAMA,MATA_KULIAH_NAMA, dsn.DOSEN_NAMA, JAM_KULIAH_MULAI as JAM_MULAI, jk.JAM as JAM_JK, mk.JAM as JAM_MK')
-                    ->from('tb_mata_kuliah mk')
-                    ->join('tb_jadwal jd','mk.MATA_KULIAH_ID = jd.MATA_KULIAH_ID')
-                    ->join('tb_dosen dsn','jd.DOSEN_ID = dsn.DOSEN_ID')
-                    ->join('tb_jam_kuliah jk','jd.JAM_KULIAH_ID = jk.JAM_KULIAH_ID')
-                    ->join('tb_kelas kls','jd.KELAS_ID = kls.KELAS_ID')
-                    ->join('tb_ruangan r','jd.RUANGAN_ID = r.RUANGAN_ID')
-                    ->where('jd.HARI',$hari)
-                    ->where('kls.KELAS_ID',$kelas)
-                    ->where('jd.JAM_KULIAH_ID',$jam)
-                    ->order_by('jd.JAM_KULIAH_ID','asc')
-                    ->get();
-            if($query->num_rows() > 0)
-            {
-                return $query->result();
-            }
-            else
-            {
-                return false;
-            }
-        }
-        function getJadwalHarianDosen2($hari,$dosen,$jam)
-               {
-                   $query = $this->db->query("SELECT jd.JAM_KULIAH_ID as JAM_KULIAH_ID, r.RUANGAN_ID, kls.KELAS_NAMA,MATA_KULIAH_NAMA, dsn.DOSEN_NAMA, JAM_KULIAH_MULAI as JAM_MULAI, CONCAT(jk.JAM+mk.JAM-1,':45:00') as JAM_SELESAI, mk.JAM as JAM_MK  
-                            FROM tb_mata_kuliah mk
-                            INNER join tb_jadwal jd on mk.MATA_KULIAH_ID = jd.MATA_KULIAH_ID
-                            INNER JOIN tb_dosen dsn on jd.DOSEN_ID = dsn.DOSEN_ID
-                            INNER JOIN tb_jam_kuliah jk on jd.JAM_KULIAH_ID = jk.JAM_KULIAH_ID
-                            INNER JOIN tb_kelas kls on jd.KELAS_ID = kls.KELAS_ID
-                            INNER JOIN tb_ruangan r on jd.RUANGAN_ID = r.RUANGAN_ID
-                            WHERE jd.HARI = '$hari'
-                            and  dsn.EMAIL = '$dosen'
-                            and jk.JAM_KULIAH_ID = '$jam'
-                            order by jd.JAM_KULIAH_ID asc");
-                  // return $query->result();
-                   
-                    
-                   if($query->num_rows() > 0)
-                   {
-                       return $query->result();
-                   }
-                   else
-                   {
-                       return false;
-                   }
-               }
+       
 
 }
