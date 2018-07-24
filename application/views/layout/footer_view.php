@@ -112,7 +112,16 @@
 </html>
 
 <?php
-if ($this->ses_data['user_akses'] == 'Mahasiswa'):
- ?>
+if ($this->ses_data['user_akses'] == 'Mahasiswa')
+{?>
 <script src="<?php echo base_url('/assets/js/JS_mahasiswa_read_notif.js') ?>"></script>
-<?php endif; ?>
+<?php }
+elseif($this->ses_data['user_akses'] == 'Dosen')
+{ ?>
+    <script src="<?php echo base_url('/assets/js/JS_dosen_read_notif.js') ?>"></script>
+<?php }
+else
+{ ?>
+    <script src="<?php echo base_url('/assets/js/JS_admin_read_notif.js') ?>"></script>
+<?php }
+?>

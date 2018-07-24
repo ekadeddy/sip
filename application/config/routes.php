@@ -103,6 +103,14 @@ $route['admin/profil'] = 'profil';
 $route['profil/edit'] = 'profil/updateProfil';
 $route['profil/edit/save'] = 'profil/updateProfilSave';
 
+//notif
+$route['notif/read'] = 'notif/readNotif';
+$route['notif/detail'] = 'notif/notifDetail';
+$route['jadwal/ganti/list'] = 'notif/listPerubahanJadwal';
+
+
+
+
 
 $route['default_controller'] = 'Login';
 $route['logout'] = 'Login/logout';

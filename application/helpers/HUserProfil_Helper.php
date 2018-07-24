@@ -24,11 +24,11 @@
 if ( ! function_exists('HGetNavbarUser')) {
 	function HGetNavbarUser($userAkses)
 	{
-		if ($userAkses == 'adm')
+		if ($userAkses == 'Admin')
 		{
 			$path='layout/admin/navbar_admin_view';
 		}
-		else if ($userAkses == 'mhs')
+		else if ($userAkses == 'Mahasiswa')
 		{
 			$path='layout/mahasiswa/navbar_mahasiswa_view';
 		}
@@ -72,7 +72,7 @@ if ( ! function_exists('HGetAksesProfil')) {
 		{
 			return 'Mahasiswa';
 		}
-		else
+		elseif($userAkses == 'dsn')
 		{
 			return 'Dosen';
 		}

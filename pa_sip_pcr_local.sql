@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 14, 2018 at 06:14 AM
+-- Generation Time: Jul 24, 2018 at 06:04 AM
 -- Server version: 10.1.32-MariaDB
 -- PHP Version: 7.1.17
 
@@ -69,7 +69,7 @@ CREATE TABLE `tb_dosen` (
 
 INSERT INTO `tb_dosen` (`DOSEN_ID`, `PROGRAM_STUDI_ID`, `EMAIL`, `DOSEN_NAMA`, `ALAMAT`, `STATUS`, `DOSEN_IMAGE_PATH`, `GENERASI`, `DOSEN_INISIAL`) VALUES
 ('DSN0000001', 'PS001', 'dosen@pcr.ac.id', 'Adam', 'jl kebon jeruk', 'Y', 'assets/images/users/dosen_icon.png', 2012, 'ADM'),
-('DSN0000002', 'PS002', 'dosen2@pcr.ac.id', 'Badu', 'JL AMAL', 'Y', 'assets/images/users/dosen.png', 2013, 'AML');
+('DSN0000002', 'PS002', 'badu@pcr.ac.id', 'Badu', 'JL AMAL', 'Y', 'assets/images/users/dosen.png', 2013, 'AML');
 
 -- --------------------------------------------------------
 
@@ -86,55 +86,21 @@ CREATE TABLE `tb_jadwal` (
   `JAM_KULIAH_ID` varchar(2) NOT NULL,
   `HARI` varchar(10) NOT NULL,
   `STATUS` varchar(50) NOT NULL,
-  `TANGGAL_GANTI` date NOT NULL
+  `TANGGAL_GANTI` date NOT NULL,
+  `DTMUPD` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tb_jadwal`
 --
 
-INSERT INTO `tb_jadwal` (`JADWAL_ID`, `MATA_KULIAH_ID`, `DOSEN_ID`, `KELAS_ID`, `RUANGAN_ID`, `JAM_KULIAH_ID`, `HARI`, `STATUS`, `TANGGAL_GANTI`) VALUES
-('J000000001', 'MK00000001', 'DSN0000001', '3TKA', '281', '1', 'SELASA', 'AKTIF', '0000-00-00'),
-('J000000002', 'MK00000002', 'DSN0000001', '3TKB', '284', '5', 'SENIN', 'AKTIF', '0000-00-00'),
-('J000000003', 'MK00000003', 'DSN0000001', '3TKB', '151', '3', 'SELASA', 'AKTIF', '0000-00-00'),
-('J000000004', 'MK00000001', 'DSN0000001', '3TKA', '281', '8', 'rabu', 'AKTIF', '0000-00-00'),
-('J000000005', 'MK00000002', 'DSN0000001', '3TKA', '151', '7', 'kamis', 'AKTIF', '0000-00-00'),
-('J000000006', 'MK00000002', 'DSN0000001', '4TIB', '151', '9', 'senin', 'AKTIF', '0000-00-00'),
-('J000000010', 'MK00000002', 'DSN0000001', '3TKA', '119', '1', 'senin', 'AKTIF', '0000-00-00'),
-('J000000011', 'MK00000001', 'DSN0000001', '3TKA', '119', '1', 'jumat', 'AKTIF', '0000-00-00');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tb_jadwal_approval`
---
-
-CREATE TABLE `tb_jadwal_approval` (
-  `JADWAL_APPORVAL_ID` varchar(10) NOT NULL,
-  `JADWAL_GANTI_ID` varchar(10) NOT NULL,
-  `APPROVAL_STATUS` varchar(10) NOT NULL,
-  `APPROVAL_BY` varchar(50) NOT NULL,
-  `REJECT_BY` varchar(50) NOT NULL,
-  `KET` text NOT NULL,
-  `DTMUPD` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `tb_jadwal_approval`
---
-
-INSERT INTO `tb_jadwal_approval` (`JADWAL_APPORVAL_ID`, `JADWAL_GANTI_ID`, `APPROVAL_STATUS`, `APPROVAL_BY`, `REJECT_BY`, `KET`, `DTMUPD`) VALUES
-('JA00000001', 'JG00000001', 'Y', 'admin', '-', '', '0000-00-00 00:00:00'),
-('JA00000002', 'JG00000002', 'N', '-', 'admin', 'Ruangan tidak tersedia', '0000-00-00 00:00:00'),
-('JA00000003', 'JG00000007', 'Y', 'admin', '-', '', '2018-07-08 11:30:03'),
-('JA00000004', 'JG00000013', 'Y', 'admin', '-', '', '2018-07-08 11:30:11'),
-('JA00000005', 'JG00000012', 'Y', 'admin', '-', '', '2018-07-08 11:30:40'),
-('JA00000006', 'JG00000011', 'T', '-', 'admin', '', '2018-07-08 11:30:44'),
-('JA00000007', 'JG00000010', 'T', '-', 'admin', '', '2018-07-08 11:33:33'),
-('JA00000008', 'JG00000009', 'T', '-', 'admin', '', '2018-07-08 11:33:53'),
-('JA00000009', 'JG00000008', 'T', '-', 'admin', '', '2018-07-08 11:34:14'),
-('JA00000010', 'JG00000015', 'T', '-', 'admin', '', '2018-07-08 11:37:38'),
-('JA00000011', 'JG00000014', 'T', '-', 'admin', '', '2018-07-08 11:37:56');
+INSERT INTO `tb_jadwal` (`JADWAL_ID`, `MATA_KULIAH_ID`, `DOSEN_ID`, `KELAS_ID`, `RUANGAN_ID`, `JAM_KULIAH_ID`, `HARI`, `STATUS`, `TANGGAL_GANTI`, `DTMUPD`) VALUES
+('J000000001', 'MK00000002', 'DSN0000001', '3TKA', '120', '1', 'SELASA', 'AKTIF', '0000-00-00', '2018-07-15 15:16:46'),
+('J000000002', 'MK00000002', 'DSN0000001', '3TKB', '284', '5', 'SENIN', 'AKTIF', '0000-00-00', '0000-00-00 00:00:00'),
+('J000000004', 'MK00000001', 'DSN0000001', '3TKA', '281', '8', 'RABU', 'AKTIF', '0000-00-00', '0000-00-00 00:00:00'),
+('J000000005', 'MK00000002', 'DSN0000001', '3TKA', '151', '7', 'KAMIS', 'AKTIF', '0000-00-00', '0000-00-00 00:00:00'),
+('J000000006', 'MK00000002', 'DSN0000001', '4TIB', '151', '9', 'SENIN', 'AKTIF', '0000-00-00', '2018-07-15 15:00:54'),
+('J000000011', 'MK00000003', 'DSN0000001', '3TKA', '120', '1', 'JUMAT', 'AKTIF', '0000-00-00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -150,6 +116,10 @@ CREATE TABLE `tb_jadwal_ganti` (
   `RUANGAN_ID` varchar(5) NOT NULL,
   `JAM_KULIAH_ID` varchar(2) NOT NULL,
   `HARI` varchar(10) NOT NULL,
+  `STATUS` varchar(3) NOT NULL,
+  `REQUEST_TO` varchar(50) NOT NULL,
+  `APPROVAL_BY` varchar(50) NOT NULL,
+  `REJECT_BY` varchar(50) NOT NULL,
   `KET` text NOT NULL,
   `DTMUPD` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -158,23 +128,76 @@ CREATE TABLE `tb_jadwal_ganti` (
 -- Dumping data for table `tb_jadwal_ganti`
 --
 
-INSERT INTO `tb_jadwal_ganti` (`JADWAL_GANTI_ID`, `JADWAL_ID`, `TANGGAL`, `PERTEMUAN_KE`, `RUANGAN_ID`, `JAM_KULIAH_ID`, `HARI`, `KET`, `DTMUPD`) VALUES
-('JG00000001', 'J000000002', '2018-07-20', '2', 'R119', '1', 'JUMAT', 'Dosen cuti', '0000-00-00 00:00:00'),
-('JG00000002', 'J000000003', '2018-07-16', '2', 'R119', '2', 'SENIN', 'Dosen cuti', '0000-00-00 00:00:00'),
-('JG00000003', 'J000000002', '0000-00-00', '2', '151', '3', 'rabu', 'dfgdgf', '2018-07-07 10:59:39'),
-('JG00000004', 'J000000010', '0000-00-00', '2', '120', '4', 'rabu', 'wewer', '2018-07-07 16:02:38'),
-('JG00000005', 'J000000006', '0000-00-00', '2', '120', '3', 'kamis', 'wetert', '2018-07-07 16:05:42'),
-('JG00000006', 'J000000003', '1970-01-01', '2', '120', '3', 'rabu', 'lkk', '2018-07-07 16:07:48'),
-('JG00000007', 'J000000006', '2018-07-18', '2', '120', '3', 'rabu', 'ppp', '2018-07-07 16:10:40'),
-('JG00000008', 'J000000002', '2018-07-18', '2', '120', '3', 'rabu', 'asdasd', '2018-07-07 16:23:41'),
-('JG00000009', 'J000000006', '2018-07-11', '2', '120', '2', 'rabu', 'qweqw', '2018-07-07 16:26:06'),
-('JG00000010', 'J000000001', '2018-07-11', '2', '120', '9', 'rabu', 'asda', '2018-07-07 21:19:46'),
-('JG00000011', 'J000000001', '2018-07-26', '2', '151', '8', 'kamis', 'asdasd', '2018-07-07 21:20:02'),
-('JG00000012', 'J000000005', '2018-07-18', '2', '281', '5', 'rabu', 'asdasd', '2018-07-07 21:20:15'),
-('JG00000013', 'J000000002', '2018-07-19', '2', '151', '6', 'kamis', 'asd', '2018-07-07 21:20:27'),
-('JG00000014', 'J000000006', '2018-07-18', '2', '151', '2', 'rabu', 'sdsd', '2018-07-08 16:34:41'),
-('JG00000015', 'J000000006', '2018-07-19', '2', '120', '3', 'kamis', 'asdas', '2018-07-08 16:34:59'),
-('JG00000016', 'J000000001', '2018-07-25', '2', '151', '3', 'rabu', 'asds', '2018-07-13 00:02:22');
+INSERT INTO `tb_jadwal_ganti` (`JADWAL_GANTI_ID`, `JADWAL_ID`, `TANGGAL`, `PERTEMUAN_KE`, `RUANGAN_ID`, `JAM_KULIAH_ID`, `HARI`, `STATUS`, `REQUEST_TO`, `APPROVAL_BY`, `REJECT_BY`, `KET`, `DTMUPD`) VALUES
+('JDG0000001', 'J000000002', '2018-07-31', '2', '151', '3', 'SELASA', 'APV', 'admin', 'admin', '-', '', '2018-07-22 05:05:54'),
+('JDG0000002', 'J000000006', '2018-07-31', '2', '136', '3', 'SELASA', 'APV', 'admin', 'admin', '-', 'asdasd', '2018-07-22 01:53:01'),
+('JDG0000003', 'J000000006', '2018-07-31', '2', '152', '3', 'SELASA', 'RJC', 'admin', '-', 'admin', 'asdas', '2018-07-22 02:04:10'),
+('JDG0000004', 'J000000004', '2018-07-31', '2', '137', '2', 'SELASA', 'APV', 'admin', 'admin', '-', '', '2018-07-23 00:16:54'),
+('JDG0000005', 'J000000001', '2018-07-31', '2', '137', '2', 'SELASA', 'RJC', 'admin', '-', 'admin', '', '2018-07-23 00:29:05'),
+('JDG0000006', 'J000000006', '2018-08-01', '2', '125', '6', 'RABU', 'RJC', 'admin', '-', 'admin', 'KEMANA', '2018-07-23 00:31:03'),
+('JDG0000007', 'J000000011', '2018-08-02', '2', '138', '1', 'KAMIS', 'REQ', 'admin', '-', '-', 'wtrsgfddsfd', '2018-07-23 02:56:45');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_jadwal_ganti_history`
+--
+
+CREATE TABLE `tb_jadwal_ganti_history` (
+  `JADWAL_GANTI_HISTORY_ID` varchar(10) NOT NULL,
+  `JADWAL_GANTI_ID` varchar(10) NOT NULL,
+  `JADWAL_ID` varchar(10) NOT NULL,
+  `RUANGAN_ID` varchar(5) NOT NULL,
+  `JAM_KULIAH_ID` varchar(2) NOT NULL,
+  `TANGGAL` date NOT NULL,
+  `PERTEMUAN_KE` int(3) NOT NULL,
+  `HARI` varchar(10) NOT NULL,
+  `STATUS` varchar(3) NOT NULL,
+  `APPROVAL_BY` varchar(50) NOT NULL,
+  `REJECT_BY` varchar(50) NOT NULL,
+  `KET` text NOT NULL,
+  `DTMUPD` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tb_jadwal_ganti_history`
+--
+
+INSERT INTO `tb_jadwal_ganti_history` (`JADWAL_GANTI_HISTORY_ID`, `JADWAL_GANTI_ID`, `JADWAL_ID`, `RUANGAN_ID`, `JAM_KULIAH_ID`, `TANGGAL`, `PERTEMUAN_KE`, `HARI`, `STATUS`, `APPROVAL_BY`, `REJECT_BY`, `KET`, `DTMUPD`) VALUES
+('JGH0000001', 'JDG0000001', 'J000000002', '151', '3', '2018-07-31', 2, 'SELASA', 'REQ', '-', '-', 'asda', '2018-07-22 01:52:31'),
+('JGH0000002', 'JDG0000002', 'J000000006', '136', '3', '2018-07-31', 2, 'SELASA', 'REQ', '-', '-', 'asdasd', '2018-07-22 01:53:01'),
+('JGH0000003', 'JDG0000003', 'J000000006', '152', '3', '2018-07-31', 2, 'SELASA', 'RJC', '-', 'admin', 'asdas', '2018-07-22 02:04:10'),
+('JGH0000004', 'JDG0000004', 'J000000004', '137', '2', '2018-07-31', 2, 'SELASA', 'REQ', '-', '-', 'asdas', '2018-07-22 13:14:34'),
+('JGH0000005', 'JDG0000005', 'J000000001', '137', '2', '2018-07-31', 2, 'SELASA', 'REQ', '-', '-', 'asdas', '2018-07-22 23:00:45'),
+('JGH0000006', 'JDG0000006', 'J000000006', '125', '6', '2018-08-01', 2, 'RABU', 'REQ', '-', '-', 'SADAS SADIS', '2018-07-23 00:24:05'),
+('JGH0000007', 'JDG0000005', 'J000000001', '137', '2', '2018-07-31', 0, 'SELASA', 'RJC', '-', 'admin', '', '2018-07-23 00:29:05'),
+('JGH0000008', 'JDG0000006', 'J000000006', '125', '6', '2018-08-01', 0, 'RABU', 'RJC', '-', 'admin', 'KEMANA', '2018-07-23 00:31:03'),
+('JGH0000009', 'JDG0000007', 'J000000011', '138', '1', '2018-08-02', 2, 'KAMIS', 'REQ', '-', '-', 'wtrsgfddsfd', '2018-07-23 02:56:45');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_jadwal_notif`
+--
+
+CREATE TABLE `tb_jadwal_notif` (
+  `JADWAL_NOTIF_ID` varchar(10) NOT NULL,
+  `JADWAL_GANTI_ID` varchar(10) NOT NULL,
+  `EMAIL` varchar(50) NOT NULL,
+  `READ_STATUS` varchar(1) NOT NULL,
+  `NOTIF_TIPE` varchar(3) NOT NULL,
+  `DTMUPD` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tb_jadwal_notif`
+--
+
+INSERT INTO `tb_jadwal_notif` (`JADWAL_NOTIF_ID`, `JADWAL_GANTI_ID`, `EMAIL`, `READ_STATUS`, `NOTIF_TIPE`, `DTMUPD`) VALUES
+('N000000001', 'JDG0000001', 'admin', '1', 'ADM', '2018-07-23 02:47:02'),
+('N000000002', 'JDG0000002', 'admin', '1', 'ADM', '2018-07-23 02:47:13'),
+('N000000003', 'JDG0000002', 'dosen@pcr.ac.id', '1', 'DSN', '2018-07-23 02:56:17'),
+('N000000004', 'JDG0000004', 'admin', '1', 'ADM', '2018-07-24 10:14:54');
 
 -- --------------------------------------------------------
 
@@ -185,7 +208,7 @@ INSERT INTO `tb_jadwal_ganti` (`JADWAL_GANTI_ID`, `JADWAL_ID`, `TANGGAL`, `PERTE
 CREATE TABLE `tb_jam_kuliah` (
   `JAM_KULIAH_ID` int(2) NOT NULL,
   `JAM_KULIAH_MULAI` time NOT NULL,
-  `JAM` int(2) NOT NULL,
+  `JAM` varchar(2) NOT NULL,
   `KET` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -194,16 +217,16 @@ CREATE TABLE `tb_jam_kuliah` (
 --
 
 INSERT INTO `tb_jam_kuliah` (`JAM_KULIAH_ID`, `JAM_KULIAH_MULAI`, `JAM`, `KET`) VALUES
-(1, '07:00:00', 7, '7 - 8'),
-(2, '08:00:00', 8, '8 - 9'),
-(3, '09:00:00', 9, '9 - 10'),
-(4, '10:00:00', 10, '10 - 11'),
-(5, '11:00:00', 11, '11 -12'),
-(6, '12:00:00', 12, '12 - 13'),
-(7, '13:00:00', 13, '13:-00-14:00'),
-(8, '14:00:00', 14, '14:00-15:00'),
-(9, '15:00:00', 15, '15:00-16:00'),
-(10, '16:00:00', 16, '16:00-17:00');
+(1, '07:00:00', '07', '7 - 8'),
+(2, '08:00:00', '08', '8 - 9'),
+(3, '09:00:00', '9', '9 - 10'),
+(4, '10:00:00', '10', '10 - 11'),
+(5, '11:00:00', '11', '11 -12'),
+(6, '12:00:00', '12', '12 - 13'),
+(7, '13:00:00', '13', '13:-00-14:00'),
+(8, '14:00:00', '14', '14:00-15:00'),
+(9, '15:00:00', '15', '15:00-16:00'),
+(10, '16:00:00', '16', '16:00-17:00');
 
 -- --------------------------------------------------------
 
@@ -252,8 +275,8 @@ CREATE TABLE `tb_mahasiswa` (
 INSERT INTO `tb_mahasiswa` (`MAHASISWA_ID`, `KELAS_ID`, `MAHASISWA_NAMA`, `EMAIL`, `ALAMAT`, `STATUS`, `MAHASISWA_IMAGE_PATH`, `GENERASI`) VALUES
 (1255301019, '3TKA', 'Eka Deddy Saputra', 'mahasiswa', 'jl kepompong', 'Y', 'assets\\images\\users\\eka_deddy.jpg', 2012),
 (1556401049, '3TKB', 'Shelin', 'shelin', 'jl hungaria', 'N', 'assets\\images\\users\\shelin.jpg', 2015),
-(1556401050, '3TKB', 'Ajo', 'ajo', 'jl hungaria', 'N', 'assets\\images\\users\\dosen_icon.png', 2015),
-(1556401051, '3TKB', 'Arif', 'arif', 'jl hungaria', 'N', 'assets\\images\\users\\dosen_icon.png', 2015);
+(1556401050, '3TKA', 'Ajo', 'ajo', 'jl hungaria', 'N', 'assets\\images\\users\\dosen_icon.png', 2015),
+(1556401051, '4TIB', 'Arif', 'arif', 'jl hungaria', 'N', 'assets\\images\\users\\dosen_icon.png', 2015);
 
 -- --------------------------------------------------------
 
@@ -340,11 +363,73 @@ CREATE TABLE `tb_ruangan` (
 --
 
 INSERT INTO `tb_ruangan` (`RUANGAN_ID`, `STATUS`, `KETERANGAN`) VALUES
+('118', 'RKELAS', 'Ruang Kelas'),
 ('119', 'RKELAS', 'Ruang Kelas'),
 ('120', 'RKELAS', 'Ruang Kelas'),
+('124', 'RKELAS', 'Ruang Kelas'),
+('125', 'RKELAS', 'Ruang Kelas'),
+('126', 'RKELAS', 'Ruang Kelas'),
+('127', 'RKELAS', 'Ruang Kelas'),
+('128', 'RKELAS', 'Ruang Kelas'),
+('129', 'RKELAS', 'Ruang Kelas'),
+('130', 'RKELAS', 'Ruang Kelas'),
+('133', 'RKELAS', 'Ruang Kelas'),
+('134', 'RKELAS', 'Ruang Kelas'),
+('135', 'RLAB', 'Ruang Lab Teknik Tenaga Listrik'),
+('136', 'RLAB', 'Ruang Lab Teknik Tenaga Listrik'),
+('137', 'RLAB', 'Ruang Lab Teknik Tenaga Listrik'),
+('138', 'RLAB', 'Ruang Lab Teknik Tenaga Listrik'),
+('140', 'RKELAS', 'Ruang Kelas'),
 ('151', 'RKELAS', 'Ruang Kelas'),
-('281', 'RLAB', 'Lab Jaringan'),
-('284', 'RKELAS', 'Ruang Kelas');
+('152', 'RKELAS', 'Ruang Kelas'),
+('153', 'RKELAS', 'Ruang Kelas'),
+('154', 'RKELAS', 'Ruang Kelas'),
+('155', 'RKELAS', 'Ruang Kelas'),
+('156', 'RKELAS', 'Ruang Kelas'),
+('190', 'RKELAS', 'Ruang Kelas'),
+('191', 'RLAB', 'Ruang Lab Pneumatik dan Hidrolik'),
+('192', 'RLAB', 'Ruang Lab Sistem Manufaktur'),
+('193', 'RLAB', 'Ruang Lab Kontrol Otomatis'),
+('210', 'RKELAS', 'Ruang Kelas'),
+('211', 'RKELAS', 'Ruang Kelas'),
+('215', 'RKELAS', 'Ruang Kelas'),
+('217', 'RLAB', 'Ruang Lab Mekatronika'),
+('218', 'RLAB', 'Ruang Lab Mekatronika'),
+('224', 'RLAB', 'Ruang Lab Elektronika Dasar'),
+('225', 'RLAB', 'Ruang Lab Digital dan Mikroprosessor'),
+('226', 'RLAB', 'Ruang Lab Digital dan Mikroprosessor'),
+('229', 'RLAB', 'Ruang Lab Rangkaian dan Pengukuran Listrik'),
+('230', 'RLAB', 'Ruang Lab Rangkaian dan Pengukuran Listrik'),
+('233', 'RLAB', 'Ruang Lab Elektronika Telekomunikasi'),
+('234', 'RLAB', 'Ruang Lab Elektronika Telekomunikasi'),
+('235', 'RLAB', 'Ruang Lab Elektronika Telekomunikasi'),
+('236', 'RLAB', 'Ruang Lab Elektronika Telekomunikasi'),
+('251', 'RLAB', 'Ruang Lab Akuntansi'),
+('252', 'RKELAS', 'Ruang Kelas'),
+('253', 'RKELAS', 'Ruang Kelas'),
+('254', 'RKELAS', 'Ruang Kelas'),
+('255', 'RLAB', 'Ruang Lab Akuntansi'),
+('256', 'RKELAS', 'Ruang Kelas'),
+('280', 'RLAB', 'Ruang Lab Mekatronika'),
+('281', 'RLAB', 'Ruang Lab Jaringan'),
+('282', 'RLAB', 'Ruang Lab Akuntansi'),
+('283', 'RLAB', 'Ruang Lab Jaringan'),
+('284', 'RLAB', 'Ruang Lab Komputer'),
+('303', 'RKELAS', 'Ruang Kelas'),
+('304', 'RKELAS', 'Ruang Kelas'),
+('305', 'RKELAS', 'Ruang Kelas'),
+('313', 'RLAB', 'Ruang Lab Komputer'),
+('316', 'RLAB', 'Ruang Lab Komputer'),
+('317', 'RLAB', 'Ruang Lab Komputer'),
+('319', 'RLAB', 'Ruang Lab Komputer'),
+('320', 'RLAB', 'Ruang Lab Komputer'),
+('324', 'RLAB', 'Ruang Lab Komputer'),
+('325', 'RLAB', 'Ruang Lab Komputer'),
+('329', 'RLAB', 'Ruang Lab Komputer'),
+('330', 'RLAB', 'Ruang Lab Komputer'),
+('WS', 'RLAB', 'Ruang Lab Gambar Teknik'),
+('WS1', 'RLAB', 'Ruang Lab Mechanical Workshop'),
+('WS2', 'RLAB', 'Ruang Lab CNC');
 
 -- --------------------------------------------------------
 
@@ -364,6 +449,8 @@ CREATE TABLE `tb_users` (
 
 INSERT INTO `tb_users` (`USER_ID`, `USER_PASSWORD`, `USER_AKSES`) VALUES
 ('admin', 'dc647eb65e6711e155375218212b3964', 'adm'),
+('ajo', 'e64b78fc3bc91bcbc7dc232ba8ec59e0', 'mhs'),
+('badu@pcr.ac.id', 'e64b78fc3bc91bcbc7dc232ba8ec59e0', 'dsn'),
 ('dosen@pcr.ac.id', 'e64b78fc3bc91bcbc7dc232ba8ec59e0', 'dsn'),
 ('mahasiswa', 'e64b78fc3bc91bcbc7dc232ba8ec59e0', 'mhs'),
 ('shelin', 'e64b78fc3bc91bcbc7dc232ba8ec59e0', 'mhs');
@@ -392,16 +479,22 @@ ALTER TABLE `tb_jadwal`
   ADD PRIMARY KEY (`JADWAL_ID`);
 
 --
--- Indexes for table `tb_jadwal_approval`
---
-ALTER TABLE `tb_jadwal_approval`
-  ADD PRIMARY KEY (`JADWAL_APPORVAL_ID`);
-
---
 -- Indexes for table `tb_jadwal_ganti`
 --
 ALTER TABLE `tb_jadwal_ganti`
   ADD PRIMARY KEY (`JADWAL_GANTI_ID`);
+
+--
+-- Indexes for table `tb_jadwal_ganti_history`
+--
+ALTER TABLE `tb_jadwal_ganti_history`
+  ADD PRIMARY KEY (`JADWAL_GANTI_HISTORY_ID`);
+
+--
+-- Indexes for table `tb_jadwal_notif`
+--
+ALTER TABLE `tb_jadwal_notif`
+  ADD PRIMARY KEY (`JADWAL_NOTIF_ID`);
 
 --
 -- Indexes for table `tb_jam_kuliah`

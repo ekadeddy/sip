@@ -168,8 +168,15 @@ class dosen extends CI_Controller {
             $ket = $this->input->post('iket');
             $semester = '1';
             
-            
-            $jadwal_ganti_id++;
+            IF($jadwal_ganti_id =='')
+            {
+                $jadwal_ganti_id='JDG0000001';
+            }
+            ELSE
+            {
+                $jadwal_ganti_id++;
+            }
+            $jadwal_ganti_hostory_id = $this->jadwal_mdl->getLastIdJadwalGanti();
             $data_jadwal_ganti = 
                     array ('JADWAL_GANTI_ID' => $jadwal_ganti_id,
                         'JADWAL_ID' => $jadwal_id,
@@ -177,13 +184,44 @@ class dosen extends CI_Controller {
                         'PERTEMUAN_KE' => '2',
                         'RUANGAN_ID' => $ruangan,
                         'JAM_KULIAH_ID' => $jam_kuliah,
-                        'HARI' => $hari,
+                        'STATUS' => 'REQ',
+                        'REQUEST_TO' => 'admin',
+                        'APPROVAL_BY' => '-',
+                        'REJECT_BY' => '-',
+                        'HARI' => strtoupper($hari),
+                        'KET' => $ket,
+                        'DTMUPD' => date('Y-m-d H:i:s')
+            );
+            
+            //HISTORY
+            
+             $jadwal_ganti_history_id= $this->jadwal_mdl->getLastIdJadwalGantiHistory();
+            
+             IF($jadwal_ganti_history_id =='')
+            {
+                $jadwal_ganti_history_id='JGH0000001';
+            }
+            ELSE
+            {
+                $jadwal_ganti_history_id++;
+            }
+             $data_jadwal_ganti_hostory = array ('JADWAL_GANTI_HISTORY_ID' => $jadwal_ganti_history_id,
+                        'JADWAL_GANTI_ID' => $jadwal_ganti_id,
+                        'JADWAL_ID' => $jadwal_id,
+                        'TANGGAL' => nice_date($tanggal,'Y-m-d'),
+                        'PERTEMUAN_KE' => '2',
+                        'RUANGAN_ID' => $ruangan,
+                        'JAM_KULIAH_ID' => $jam_kuliah,
+                        'STATUS' => 'REQ',
+                        'APPROVAL_BY' => '-',   
+                        'REJECT_BY' => '-',
+                        'HARI' => strtoupper($hari),
                         'KET' => $ket,
                         'DTMUPD' => date('Y-m-d H:i:s')
             );
             
             $this->_flashAndRedirect(
-			$this->jadwal_mdl->savePerubahanJadwal($data_jadwal_ganti),'Pergantian jadwal telah diajukan','Pengajuan jadwal Gagal','SAVEJADWALGANTI',$semester
+			$this->jadwal_mdl->reqJadwalGantiByDosen($data_jadwal_ganti,$data_jadwal_ganti_hostory),'Pergantian jadwal telah diajukan','Pengajuan jadwal Gagal','SAVEJADWALGANTI',$semester
 		);
         }
 
@@ -204,7 +242,24 @@ class dosen extends CI_Controller {
 		$data['user_akses']= $this->ses_data['user_akses'];
 		$this->load->view('pages/dosen/dosen_kalender_dashboard_view',$data);
 	}
-
+                
+        //list perubahan jadwal
+        public function jadwalPerubahan()
+	{
+		$data['user_nama']= $this->ses_data['user_nama'];
+		$data['user_image']= $this->ses_data['user_images'];
+		$data['user_akses']= $this->ses_data['user_akses'];
+                
+                $where =  array('dsn.EMAIL' => $this->ses_data['user_email'],'jdn.EMAIL' => $this->ses_data['user_email']);
+                $data['jadwal_ganti_apv'] = $this->jadwal_mdl->getApvJadwalGanti($where);
+                $data['jadwal_ganti'] = $this->jadwal_mdl->getReqJadwalGanti($where);
+                $data['jadwal_ganti_rjc'] = $this->jadwal_mdl->getRjcJadwalGanti($where);
+                
+                
+                $data['navbar']= HGetNavbarUser($this->ses_data['user_akses']);
+		$this->load->view('pages/jadwal/jadwal_perubahan_view',$data);
+	}
+        
         //flash save or no
         private function _flashAndRedirect( $successful, $successMessage, $failureMessage,$modul,$param ="")
 	{
@@ -225,6 +280,7 @@ class dosen extends CI_Controller {
 		parent::__construct();
                 date_default_timezone_set('Asia/Jakarta');
 		$user = $this->session->userdata('logged_in');
+                
 		if (!$user)
 		{
 			return redirect('logout','refresh');
@@ -232,10 +288,13 @@ class dosen extends CI_Controller {
 		else
 		{
 			$this->ses_data =  $this->session->userdata('logged_in');
-			if ( $this->ses_data['user_akses']  != 'dsn' )
-				return redirect('logout','refresh');
-
-
+                        //print($this->ses_data['user_akses']); exit;
+			if ($this->ses_data['user_akses']  != 'dsn' )
+                        {
+                            //print($this->ses_data['user_akses']); exit;
+                            return redirect('logout','refresh');                            
+                        }
+                        //print($this->ses_data['user_akses']); exit;
 			$this->ses_data['user_akses'] = 'Dosen';
 		}
 	}

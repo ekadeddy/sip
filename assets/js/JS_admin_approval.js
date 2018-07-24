@@ -17,6 +17,9 @@ var base_url = window.location.origin+'/admin/ajax-approval';
             {
                 $('.modal-title').text('Approve Form'); // Set title to Bootstrap modal title
                 $('.kata-kata').text('Apakah anda yakin ingin melakukan Approv terhadap jadwal ganti ini?'); // Set title to Bootstrap modal title
+                $('#btnSave').removeClass();
+                $('#btnSave').addClass('btn btn-success');
+                $('#btnSave').val('Approve');
                 
                 //$('#modal-default').removeClass();
                 //$('#modal-default').addClass('modal fade');
@@ -26,6 +29,7 @@ var base_url = window.location.origin+'/admin/ajax-approval';
                 $('.modal-title').text('Reject Form'); // Set title to Bootstrap modal title
                 $('#btnSave').removeClass();
                 $('#btnSave').addClass('btn btn-danger');
+                $('#btnSave').val('Reject');
                 
                 $('.kata-kata').text('Apakah anda yakin ingin melakukan Reject terhadap jadwal ganti ini?'); // Set title to Bootstrap modal title
                 

@@ -11,7 +11,7 @@ var base_url = window.location.origin+'/admin/ajax_edit_jadwal';
   
  
  $("#djam").change(function(){
-		alert("Hello! I am an alert box!!");
+		//alert("Hello! I am an alert box!!");
 		var jam=$('#djam').val();
 		var hari=$('#dhari').val();
 		tampilRuangan();

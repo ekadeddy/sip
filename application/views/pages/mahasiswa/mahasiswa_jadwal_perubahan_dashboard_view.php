@@ -1,7 +1,7 @@
 <?php
 	$this->load->view('layout/header_view');
 	$this->load->view('layout/mahasiswa/navbar_mahasiswa_view');
-        $f_attribute = array(
+        $f_attribute2 = array(
             'class'     => 'form-horizontal hidden',
             'id'        => 'freaddetail2',
             'name'      => 'freaddetail2');
@@ -12,7 +12,7 @@
             'name' => 'ijadwal_ganti_id2');
 
 
-        echo form_open('mahasiswa/jadwal/perubahan/detail', $f_attribute); 
+        echo form_open('notif/detail', $f_attribute2); 
         echo form_input($a_ijadwal_ganti_id); 
         echo form_close();
         
@@ -35,7 +35,7 @@
 		<section class="content">
 			<div class="row">
 				<div class="col-lg-12">
-                                    <div class="box box-primary">
+                                    <div class="box box-success">
                                                 <div class="box-header with-border">
                                                   <h3 class="box-title">Daftar Perubahan Jadwal Kuliah</h3>
                                                 </div>

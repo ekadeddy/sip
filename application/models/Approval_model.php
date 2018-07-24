@@ -27,16 +27,36 @@ class Approval_model extends CI_Model
             return $query->result();
         }
         
-        function saveApproval($data)
+        function updateStatusApproval($where,$data)
         {
-            $this->db->insert('tb_jadwal_approval', $data);
-		if ($this->db->affected_rows() > 0)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+            $this->db->where($where)
+						->update('tb_jadwal_ganti jdg', $data);
+        }
+        function submitJadwalGantiHistory($data)
+        {         
+            $this->db->insert('tb_jadwal_ganti_history',$data);
+            if($this->db->affected_rows() > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        function reqSaveApproval($where,$dataJadwalGanti,$datajadwalGantiHistory)
+        {
+                $this->db->trans_start();
+                $this->updateStatusApproval($where,$dataJadwalGanti);
+                $this->submitJadwalGantiHistory($datajadwalGantiHistory);
+                $this->db->trans_complete();
+		 if ($this->db->trans_status() == TRUE)
+            {
+                   return TRUE;
+            }
+            else
+            {
+                return FALSE;
+            }
         }
 }

@@ -359,7 +359,7 @@ class admin extends CI_Controller {
         {
             $data['user_nama']= $this->ses_data['user_nama'];
             $data['user_image']= $this->ses_data['user_images'];
-            $data['aprroval_list'] = $this->jadwal_mdl->getApprovalData();
+            $data['aprroval_list'] = $this->jadwal_mdl->getAllReqJadwalGanti();
             
 //            $aprroval_list = $this->approval_mdl->getApprovalDataById('JG00000007');
 //             foreach ($aprroval_list as $row)
@@ -375,7 +375,6 @@ class admin extends CI_Controller {
         }
         public function approvalSave()
         {
-            $jadwal_approval_id = $this->approval_mdl->getLastApprovalId();
             $jadwal_ganti_id = $this->input->post('jadwal_ganti_id');
             //$jadwal_id = $this->input->post('');
             $approval_status = $this->input->post('approval_status');
@@ -383,30 +382,53 @@ class admin extends CI_Controller {
             $approv_by = $this->ses_data['user_email'];
             $reject_by = $this->ses_data['user_email'];
 
-            $jadwal_approval_id++;
+            $jadwal_ganti_hostory_id = $this->jadwal_mdl->getLastIdJadwalGantiHistory();
             
             if ($approval_status == 'Y')
             {
                 $reject_by = '-';
+                $status = 'APV';
                 $successMessage = 'Approval Berhasil';
             }
             else
             {
                 $approv_by = '-';
+                $status = 'RJC';
                 $successMessage = 'Reject Berhasil';
             }
           
+            $jadwal_ganti_hostory_id++;
+            $where = array('jdg.JADWAL_GANTI_ID' => $jadwal_ganti_id);
+            $oldjadwalGanti = $this->jadwal_mdl->getJadwalGantiById($where);
+            foreach ($oldjadwalGanti as $row)
+            {
+                //UPDATE STATUS
+                $datajadwalGanti = 
+                    array ('STATUS' => $status,
+                        'APPROVAL_BY' => $approv_by,
+                        'REJECT_BY' => $reject_by,
+                        'KET' => $ket,
+                        'DTMUPD' => date('Y-m-d H:i:s'));
+                //INSERT HOSTORY
+                $datajadwalGantiHistory = 
+                    array ('JADWAL_GANTI_HISTORY_ID' => $jadwal_ganti_hostory_id,
+                        'JADWAL_GANTI_ID' => $jadwal_ganti_id,
+                        'JADWAL_ID' => $row->JADWAL_ID,
+                        'TANGGAL' => $row->TANGGAL,
+                        'PERTEMUAN_KE' => 0,
+                        'RUANGAN_ID' => $row->RUANGAN_ID,
+                        'JAM_KULIAH_ID' => $row->JAM_KULIAH_ID,
+                        'STATUS' => $status,
+                        'APPROVAL_BY' => $approv_by,
+                        'REJECT_BY' => $reject_by,
+                        'HARI' => $row->HARI,
+                        'KET' => $ket,
+                        'DTMUPD' => date('Y-m-d H:i:s'));
+            }
             
-            $data_approval = array ('JADWAL_APPORVAL_ID' => $jadwal_approval_id,
-                'JADWAL_GANTI_ID' => $jadwal_ganti_id,
-                'APPROVAL_STATUS' => $approval_status,
-                'APPROVAL_BY'     => $approv_by,
-                'REJECT_BY'       => $reject_by,
-                'KET'             => $ket,
-                'DTMUPD'          => date('Y-m-d H:i:s'));
             
             $this->_flashAndRedirect(
-                    $this->approval_mdl->saveApproval($data_approval),$successMessage,'Approval Gagal Dilakukan!','APPROVALSAVE',$approval_status);
+                    $this->approval_mdl->reqSaveApproval($where,$datajadwalGanti,$datajadwalGantiHistory),$successMessage,'Approval Gagal Dilakukan!','APPROVALSAVE',$approval_status);
             
         }
         

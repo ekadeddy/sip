@@ -29,8 +29,9 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-bell-o"></i>
                                 <?php 
-                                $user = $this->ses_data['user_email'];
-                                $jumlahNotif = jumlahNotifUnread($user); 
+                                $email = $this->ses_data['user_email'];
+                                $akses= $this->ses_data['user_akses'];
+                                $jumlahNotif = totNotifMhsUnread($email); 
                                 
                                 if($jumlahNotif>0):?>
                                 <span class="label label-warning"><?= $jumlahNotif ?></span>
@@ -38,12 +39,13 @@
                             
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">Anda Memiliki <?= jumlahNotifUnread($user) ?> Notifikasi belum dibaca</li>
+                            <li class="header">Anda Memiliki <?= jumlahNotifUnread($email,$akses) ?> Notifikasi belum dibaca</li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">
                                     <?php 
-                                    $notifUnread = notifUnread($user);
+                                    //notif mahasiswa
+                                    $notifUnread = notifMhsUnread($email,$akses);
                                     $f_attribute = array(
                                     'class'     => 'form-horizontal hidden',
                                     'id'        => 'freaddetail',
@@ -54,7 +56,7 @@
                                       'name' => 'ijadwal_ganti_id');
 
                                     
-                                    echo form_open('mahasiswa/jadwal/perubahan/detail', $f_attribute); 
+                                    echo form_open('notif/detail', $f_attribute); 
                                     echo form_input($a_ijadwal_ganti_id); 
                                     echo form_close();
                                      
@@ -62,7 +64,7 @@
                                     {?>
                                     <li>                
                                           <a href="#" onclick="readNotif('<?= $row->JADWAL_GANTI_ID ?>')">
-                                            <i class="fa fa-users text-aqua"></i>Perubahan Jadwal Matakuliah <?= $row->MATA_KULIAH_NAMA ?>
+                                            <i class="fa fa-users text-aqua"></i><?= $row->JADWAL_GANTI_ID ?>Perubahan Jadwal Matakuliah <?= $row->MATA_KULIAH_NAMA ?>
                                         </a>
                                     </li> 
                                     

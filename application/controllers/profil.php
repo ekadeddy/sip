@@ -9,9 +9,9 @@ class profil extends CI_Controller {
 		$data['user_nama']= $this->ses_data['user_nama'];
 		$data['user_image']= $this->ses_data['user_images'];
 		$data['navbar']= HGetNavbarUser($this->ses_data['user_akses']);
-		$data['user_is'] = HGetAksesProfil($this->ses_data['user_akses']);
-
-		if ($this->ses_data['user_akses'] == 'mhs')
+		$data['user_is'] = $this->ses_data['user_akses'];
+//                /print($this->ses_data['user_akses']);exit;
+		if ($this->ses_data['user_akses'] == 'Mahasiswa')
 		{
 			$ps = $this->profil_mdl->getProfilLengkapMahasiswa($this->ses_data['user_email']);
 			foreach ($ps as $row)
@@ -23,7 +23,7 @@ class profil extends CI_Controller {
                                 
 			}
 		}
-		else if ($this->ses_data['user_akses'] == 'dsn')
+		else if ($this->ses_data['user_akses'] == 'Dosen')
 		{
 			$ps = $this->dosen_mdl->getProgramStudi($this->ses_data['user_id']);
 			foreach ($ps as $row)
@@ -110,6 +110,7 @@ class profil extends CI_Controller {
 		else
 		{
 			$this->ses_data =  $this->session->userdata('logged_in');
+                         $this->ses_data['user_akses'] = HGetAksesProfil($this->ses_data['user_akses']);
 		}
 
 
