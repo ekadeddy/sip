@@ -26,7 +26,7 @@ $user_nama = $getdata['user_nama'];
             </a>
 
             <div class="navbar-custom-menu">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav" id="load">
                     <!-- Messages: style can be found in dropdown.less-->
                     <li class="dropdown notifications-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -90,13 +90,13 @@ $user_nama = $getdata['user_nama'];
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="<?= base_url($user_image)?>" class="user-image" alt="User Image">
+                            <img src="<?= $user_image?>" class="user-image" alt="User Image">
                             <span class="hidden-xs"><?= $user_nama ?></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <img src="<?=base_url($user_image)?>" class="img-circle" alt="User Image">
+                                <img src="<?= $user_image?>" class="img-circle" alt="User Image">
 
                                 <p>
                                     Alexander Pierce - Web Developer
@@ -119,6 +119,9 @@ $user_nama = $getdata['user_nama'];
                     </li>
 
                 </ul>
+                
+                
+                
             </div>
         </nav>
     </header>
@@ -132,7 +135,7 @@ $user_nama = $getdata['user_nama'];
             <!-- Sidebar user panel -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="<?= base_url($user_image) ?>" class="img-circle" alt="User Image XX">
+                    <img src="<?= $user_image ?>" class="img-circle" alt="User Image XX">
                 </div>
                 <div class="pull-left info">
                     <p><?= $user_nama; ?></p>
@@ -142,19 +145,10 @@ $user_nama = $getdata['user_nama'];
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu" data-widget="tree">
                 <li class="header">MAIN NAVIGATION</li>
-                <li class="treeview">
-                    <a href="#">
-                      <i class="fa fa-laptop"></i>
-                      <span>Manage Jadwal Kuliah</span>
-                      <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                      </span>
-                    </a>
-                    <ul class="treeview-menu">
-                      <li><a href="<?= base_url('admin/manage/jadwal/add')?>"><i class="fa fa-circle-o"></i> Add</a></li>
-                      <li><a href="<?= base_url('admin/manage/jadwal/edit')?>"><i class="fa fa-circle-o"></i> Edit/Delete</a></li>
-                    </ul>
-                </li> 
+                <li>
+                    <a href="<?= base_url('admin/manage/jadwal/edit')?>">
+                        <i class="fa fa-circle-o"></i> <span> Manage Jadwal Kuliah </span></a>
+                </li>
                 <li>
                     <a href="<?= base_url('admin/manage/kalender')?>">
                         <i class="fa fa-calendar-plus-o"></i> <span>Manage Kalender Akademik</span>
@@ -168,15 +162,17 @@ $user_nama = $getdata['user_nama'];
                 </li>
                 <li>
                     <a href="<?= base_url('admin/approval')?>">
-                        <i class="fa fa-calendar-check-o"></i> <span>Approval Ganti Jadawal</span>
+                        <i class="fa fa-calendar-check-o"></i> <span>Approval Ganti Jadwal</span>
                     </a>
                 </li>
                 <li>
                     <a href="<?= base_url('jadwal/ganti/list')?>">
-                        <i class="fa fa-bell-o"></i> <span>Perubahan Jadwal</span>
+                        <i class="fa fa-bell-o"></i> <span>Status Pengajuan Jadwal</span>
                     </a>
                 </li>
+
             </ul>
+            
         </section>
         <!-- /.sidebar -->
     </aside>

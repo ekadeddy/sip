@@ -7,7 +7,7 @@ $(function () {
 	$.ajaxSetup({
 		type:"POST",
 		url: base_url,
-		cache: false,
+		cache: false    
 	});
 
         $("#dkelas").change(function(){
@@ -15,20 +15,20 @@ $(function () {
 		
                 tampilMataKuliah();
 		$.ajax({
-				data:{cek:'cekKelas', dkelas:dkelas},
+                        data:{cek:'cekKelas', dkelas:dkelas},
 
-				success: function(respond){
-                                  $("#dmatakuliah").html(respond);
-                                  $('#dmatakuliah').val('pilih');
-                                //alert("2");
-				},
-				error: function (jqXHR, textStatus, errorThrown)
-				{
-					//alert(base_url);
+                        success: function(respond){
+                          $("#dmatakuliah").html(respond);
+                          $('#dmatakuliah').val('pilih');
+                        //alert("2");
+                        },
+                        error: function (jqXHR, textStatus, errorThrown)
+                        {
+                                //alert(base_url);
 
-					alert('Error get data from ajax');
-				}
-			}
+                                alert('Error get data from ajax');
+                        }
+                }
 		);
 
 
@@ -41,7 +41,7 @@ $(function () {
                 var dmatakuliah=$('#dmatakuliah').val();
                 tampilHari();
 		$.ajax({
-                        data:{cek:'cekMatkul', dkelas:dkelas, dmatakuliah:dmatakuliah},
+                        data:{cek:'gantiJadwal', dkelas:dkelas, dmatakuliah:dmatakuliah},
 
                         success: function(respond){
                                 $("#dhari").html(respond);
@@ -86,31 +86,28 @@ $(function () {
                                 
                                 if(a['hari'] == 'sabtu' || a['hari'] == 'minggu')
                                 {
-                                    alert('tanggal ga boleh b '+ a['hari']);
+                                    alert('Tidak boleh hari '+ a['hari']);
                                     $('#itanggal').val('');
                                     $('#djam').addClass('hidden');
                                 }
                                 else
                                 {
-                                    if(a['status'] == true)
-                                    {
-                                        tampilJam();
+                                    //if(a['status'] == true)
+                                    //{
+                                    //    tampilJam();
                                         //status
                                         //alert('tanggal Boleh '+a['jadwal_id']);
                                         $('#ihari').val(a['hari']);
                                         $('#ijadwal_id').val(a['jadwal_id']);
                                         
                                         
-                                        alert($('#itanggal').val());
-                                    }
-                                    else
-                                    {
-                                        alert('Pengajuan Maksimal 3 hari sebelum jam pergantian '+ a['hari']);
-                                    }
-                                        
-                                    
-                                    
-                                    
+                                    //    alert($('#itanggal').val());
+                                    //}
+                                    //else
+                                    //{
+                                    //    alert('Pengajuan Maksimal 3 hari sebelum jam pergantian '+ a['hari']);
+                                    //}
+                                         
                                 }
                                  
                             },
@@ -140,20 +137,22 @@ $(function () {
                                                 $("#druangan").val('pilih');
 
                                         },
-                                        error: function (jqXHR, textStatus, errorThrown)
+                                        error: function (jqXHR, textStatus, errorThrown,respond)
                                         {
                                                 alert(base_url);
 
                                                 alert('Error get data from ajax');
                                         }
                                 }
-                        )
+                        );
 
 
                 });
         
 	
-
+        //function ganti jadwal
+        
+        
 
 	//funtion
 	function tampilMataKuliah() {
@@ -186,17 +185,50 @@ $(function () {
 	}
         
         
-   $(function () {
-    //Initialize Select2 Elements
-
+  
     //Date picker
     $('#itanggal').datepicker({
       autoclose: true
-    })
+    });
 
-  });
 
 
 });
+
+function gantiJadwal(jadwal_id) 
+{
+    var base_url = window.location.origin+'/dosen/ajax_dosen_ubah';
+    
+    $.ajaxSetup({
+        type:"POST",
+        url: base_url,
+        dataType: "JSON",
+    });
+    $('#modal-ganti-jadwal').modal('show'); // show bootstrap modal when complete loaded 
+
+    
+    $.ajax({
+                                        data:{cek:'gantiJadwal', jadwal_id:jadwal_id},
+
+                                        success: function(data){
+                                            //var a = JSON.parse(respond);
+                                            $("#ikelas").val(data.KELAS_NAMA);
+                                            $("#imatakuliah").val(data.MK_STATUS+' '+data.MATA_KULIAH_NAMA);
+                                             //alert(data.JADWAL_ID);
+//                                            $("#druangan").html(respond[0].JADWAL_ID);
+//                                            $("#druangan").val('pilih');
+
+                                        },
+                                        error: function (jqXHR, textStatus, errorThrown)
+                                        {
+                                                alert(base_url);
+
+                                                alert('Error get data from ajax');
+                                        }
+                                }
+                        );
+        
+
+}
 
 

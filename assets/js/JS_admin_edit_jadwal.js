@@ -36,11 +36,22 @@ var base_url = window.location.origin+'/admin/ajax_edit_jadwal';
 
 	});
 
-    function editJadwal(jadwal_id,hari,modul) 
+    function editJadwal(jadwal_id,hari,modul,kelas,ihjam2,ijam2) 
     {
          if(modul == 'S')
          {
             $('#modal-simpan').modal('show'); // show bootstrap modal when complete loaded     
+         }
+         else if(modul == 'ADD')
+         {
+             //alert(param2);
+            $('#modal-tambah').modal('show'); // show bootstrap modal when complete loaded  
+            
+            $('#ikelas2').val(kelas);
+            $('#ihari2').val(hari.toUpperCase());
+            $('#ihjam2').val(ihjam2);
+            $('#ijam2').val(ijam2);
+            
          }
          else
          {

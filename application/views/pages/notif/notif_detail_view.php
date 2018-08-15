@@ -8,7 +8,7 @@
 		<!-- Content Header (Page header) -->
 		<section class="content-header">
 			<h1>
-				&nbsp; <?php  echo $jadwal_ganti; ?>
+				&nbsp; <?php  //echo $jadwal_ganti; ?>
 			</h1>
 			<ol class="breadcrumb">
 				<li><a href="#"><i class="fa fa-dashboard"></i> <?= $user_akses ?></a></li>
@@ -73,7 +73,7 @@
               </tr>
               <tr>
                 <th>Jam</th>
-                <td><?= $row->JAM_MULAI.' - '.(($row->JAM_JK+$row->JAM_MK)-1).':45:00' ?></td>
+                <td><?= $row->JAM_MULAI.' - '.(($row->JAM_JK+($row->JAM_MK*$row->JUMLAH_JAM))-1).':45:00' ?></td>
               </tr>
               <tr>
                 <th>Ruangan</th>

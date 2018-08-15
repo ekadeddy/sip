@@ -8,10 +8,28 @@ class mahasiswa extends CI_Controller {
 	{
 		$session_data = $this->session->userdata('logged_in');
 		$data['user_nama']= $session_data['user_nama'];
-		$data['user_image']= $session_data['user_images'];
+		//$data['user_image']= base_url($this->ses_data['user_images']);
+                $data['user_image']= $this->ses_data['user_images'];
 		$this->load->view('pages/mahasiswa/dashboard_mahasiswa_view',$data);
 	}
+         public function getEventGoogle()
+        {
+              //service google
+            $gClient = new Google_Client();
+            $gClient->setAccessToken($this->ses_data['tokens']);
+            $googleCal = new Google_CalendarService($gClient);
+            //end service google
+              //service google
+            $gClient = new Google_Client();
+            $gClient->setAccessToken($_SESSION['token']);
+            $googleCal = new Google_CalendarService($gClient);
+            //end service google
+            //$calendarId = 'pcr.ac.id_lf7v1s4ngrsepmjd7niva64h1s@group.calendar.google.com';
+            $calendarId = 'primary';
+            $calendar = $googleCal->calendars->get($calendarId);
 
+            echo $calendar->getSummary();
+        }
 	//Jadwal Mata Kuliah
 	public function jadwalMataKuliah()
 	{
@@ -127,6 +145,9 @@ class mahasiswa extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+                 //service calendar
+            require_once APPPATH.'third_party/src/Google_Client.php';
+            require_once APPPATH.'third_party/src/contrib/Google_CalendarService.php';
                 date_default_timezone_set('Asia/Jakarta');
                 $user = $this->session->userdata('logged_in');
 		if (!$user)
@@ -146,3 +167,4 @@ class mahasiswa extends CI_Controller {
                 
 	}
 }
+

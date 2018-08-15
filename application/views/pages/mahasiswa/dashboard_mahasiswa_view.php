@@ -34,17 +34,27 @@ $this->load->view('layout/mahasiswa/navbar_mahasiswa_view');
 							</div>
 						</div>
 						<div class="box-body">
-							KONTEN VISI MISI
+							<strong>Visi</strong>
+
+                                                    <p class="text-justify"> Diakui Sebagai Politeknik Unggul Yang Mampu Bersaing Dalam Bidang Teknologi dan Bisnis Terapan Pada Tingkat Nasional Maupun ASEAN Tahun 2031</p>
+                                                    
+                                                    <strong>Misi</strong>
+                                                    <p class="text-justify"> Untuk mewujudkan visi di atas, maka misi yang dijalankan oleh Politeknik Caltex Riau adalah: </p>
+
+                                                    <p class="text-justify">1. Menyelenggarakan Sistem Pendidikan Vokasi bidang Teknologi dan Bisnis yang berkualitas serta relevan dengan tantangan Nasional maupun ASEAN.<br>
+                                                    2. Menciptakan budaya akademik dan budaya organisasi yang berkarakter dan bermartabat.<br>
+                                                    3. Melaksanakan penelitian dan menyebarluaskan hasilnya untuk pengembangan bidang teknologi dan bisnis terapan.<br>
+                                                    4. Melaksanakan pengabdian kepada masyarakat dengan menyebarluaskan ilmu pengetahuan, teknologi, dan budaya organisasi.<br> </p>
 						</div>
 						<!-- /.box-body -->
 						<div class="box-footer">
 							<?php
 							$tgl = date('Y-m-d H:i:s');
 							$date = date_create($tgl);
-							echo date_format($date, 'Y-m-d H:i:s').'<br>';
+							//echo date_format($date, 'Y-m-d H:i:s').'<br>';
 
 							date_add($date, date_interval_create_from_date_string('5 hours'));
-							echo date_format($date, 'Y-m-d H:i:s');
+							//echo date_format($date, 'Y-m-d H:i:s');
 
 							?>
 						</div>

@@ -62,7 +62,7 @@ $route['admin/manage/event'] = 'admin/manageEventPcr';
 $route['admin/approval'] = 'admin/approvalGantiJadwal';
 $route['admin/save-approval'] = 'admin/approvalSave';
 $route['admin/ajax-approval'] = 'admin/ajaxApproval';
-$route['admin/save-edit'] = 'admin/saveEditJadwal';
+$route['admin/save-edit'] = 'admin/saveJadwal';
 $route['admin/ajax_edit_jadwal'] = 'admin/ajax_edit_jadwal';
 
 
@@ -76,10 +76,19 @@ $route['admin-kalender'] = 'admin/kalender';
 $route['dosen/dashboard'] = 'dosen';
 $route['dosen/jadwal-kuliah'] = 'dosen/jadwalMataKuliah';
 $route['dosen/jadwal-ubah'] = 'dosen/ubahJadwalKuliah';
+$route['dosen/ajax_get_data'] = 'dosen/ajax_get_data';
 $route['dosen/ajax_dosen_ubah'] = 'dosen/ajax_get_mk_by_dosen_to_kelas';
 $route['dosen/kalender-akademik'] = 'dosen/kalenderAkademik';
 $route['dosen/event-pcr'] = 'dosen/eventPcr';
 $route['dosen/save-perubahan-jadwal'] = 'dosen/simpanJadwalPerubahan';
+$route['dosen/ajax_change_jd'] = 'dosen/ajax_change_jadwal';
+$route['dosen/ajax_g_jad'] = 'dosen/ajax_ganti_jad';
+$route['jadwal/tes/calendar'] = 'dosen/tesKalendar';
+$route['aa'] = 'admin/addEvent';
+
+$route['admin/geteventgoogle'] = 'admin/getEventGoogle';
+$route['aaa'] = 'mahasiswa/getEventGoogle';
+
 
 
 
@@ -93,7 +102,13 @@ $route['mahasiswa/kalender'] = 'mahasiswa/kalenderAkademik';
 $route['mahasiswa/event'] = 'mahasiswa/eventPcr';
 $route['mahasiswa/jadwal/perubahan/detail'] = 'mahasiswa/jadwalPerubahanDetail';
 
+//google login
+$route['g_login'] = 'login_google';
+$route['login/google_login'] = 'login_google/google_login';
 
+
+//google home
+$route['google/home'] = 'login_google/google_login';
 
 
 //profil
@@ -109,11 +124,14 @@ $route['notif/detail'] = 'notif/notifDetail';
 $route['jadwal/ganti/list'] = 'notif/listPerubahanJadwal';
 
 
+//event
+$route['dosen/view_event'] = 'dosen/viewEvent';
 
 
-
-$route['default_controller'] = 'Login';
-$route['logout'] = 'Login/logout';
+//$route['default_controller'] = 'Login'; 
+$route['default_controller'] = 'login_google'; 
+$route['logout'] = 'login/logout';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+

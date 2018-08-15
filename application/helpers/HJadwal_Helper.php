@@ -6,11 +6,20 @@ if ( ! function_exists('HJadwal_Helper'))
         {
             if ($modul == 'SAVEJADWAL')
             {
-                redirect('admin/manage-jadwal/'.$param, 'refresh');
+//                $data = array(
+//                    'dkelas'  => '3TKA',
+//                    'email' => 'john@example.com',
+//                    );
+//                form_open('admin/manage/jadwal/edit');
+//                form_hidden($data);
+//                form_submit();
+                
+                
+                redirect('admin/manage/jadwal/edit');
             }
             elseif ($modul == 'SAVEJADWALGANTI')
             {
-                redirect('dosen/jadwal-ubah', 'refresh');
+                redirect('dosen/jadwal-kuliah', 'refresh');
             }
             elseif ($modul == 'APPROVALSAVE')
             {

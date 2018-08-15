@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://sip.pcr.local:8080/';
+$config['base_url'] = 'http://sip.pcr.ac.id:8080/';
 
 /*
 |--------------------------------------------------------------------------
@@ -123,20 +123,21 @@ $config['subclass_prefix'] = 'MY_';
 |
 | Enabling this setting will tell CodeIgniter to look for a Composer
 | package auto-loader script in application/vendor/autoload.php.
-|
-|	$config['composer_autoload'] = TRUE;
-|
+|*/
+//$config['composer_autoload'] = TRUE;
+
+/*
 | Or if you have your vendor/ directory located somewhere else, you
 | can opt to set a specific path as well:
-|
-|	$config['composer_autoload'] = '/path/to/vendor/autoload.php';
-|
+|*/
+$config['composer_autoload'] = 'application/third_party/google-api-php/src/Google/autoload.php';
+/*|
 | For more information about Composer, please visit http://getcomposer.org/
 |
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = FALSE;
+//$config['composer_autoload'] = FALSE;
 
 /*
 |--------------------------------------------------------------------------

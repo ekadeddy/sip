@@ -6,6 +6,26 @@ class admin extends CI_Controller {
 	public $ses_data;
 	public $semester;
 
+	public function __construct()
+	{
+            parent::__construct();
+            //service calendar
+            require_once APPPATH.'third_party/src/Google_Client.php';
+            require_once APPPATH.'third_party/src/contrib/Google_CalendarService.php';
+            date_default_timezone_set('Asia/Jakarta');
+            if ( ! $this->session->userdata('logged_in') ){
+                    $this->ses_data = null;
+                    return redirect('logout');
+            }
+            else
+            {
+                    $this->ses_data =  $this->session->userdata('logged_in');
+
+                    if ( $this->ses_data['user_akses']  != 'adm' )
+                            return redirect('login');
+            }
+	}
+        
 	public function index()
 	{
 		$session_data = $this->session->userdata('logged_in');
@@ -60,6 +80,8 @@ class admin extends CI_Controller {
             {
                 $kelas = $this->kls_mdl->getKelasByProgramStudi($progstudi);
                 $dataps=array($progstudi=> '--pilih PS--');
+//                /print($kls);exit;
+                
             }
             else
             {
@@ -68,15 +90,16 @@ class admin extends CI_Controller {
             }
                 //kelas
 		
-            if($kls != '')
+            if($kls != 0)
             {
+                //print($kls);exit;
                 $data_kls = array($kls => '--pilih kelas--');
                 $dataps=array($progstudi=> '--pilih PS--');
                 
             }
             else
             {
-                $data_kls = array('0'=> '--pilih kelas--');
+                $data_kls = array(0 => '--pilih kelas--');
             }
                 
                 
@@ -139,7 +162,7 @@ class admin extends CI_Controller {
                 
             $this->load->view('pages/admin/admin_mng_edit_jadwal_view',$data);
 	}
-        function saveEditJadwal()
+        function saveJadwal()
         {
             $btnAction = $this->input->post('btnSave');
             $data_jadwal = array('MATA_KULIAH_ID' => $this->input->post('dmatakuliah'),
@@ -152,6 +175,29 @@ class admin extends CI_Controller {
                 );
             
             
+//            //TGL START
+            if($this->input->post('ihari2') == 'SENIN')
+                {
+                    $tgl_jadwal = '2018-08-06';
+                }
+                elseif($this->input->post('ihari2') == 'SELASA')
+                {
+                    $tgl_jadwal = '2018-08-07';
+                }
+                elseif($this->input->post('ihari2') == 'RABU')
+                {
+                    $tgl_jadwal = '2018-08-08';
+                }
+                elseif($this->input->post('ihari2') == 'KAMIS')
+                {
+                    $tgl_jadwal = '2018-08-09';
+                }
+                elseif($this->input->post('ihari2') == 'JUMAT')
+                {
+                    $tgl_jadwal = '2018-08-10';
+                }
+//            //END
+            
             if($btnAction == 'Simpan')
             {
             $where = $this->input->post('ijadwal_id');
@@ -163,9 +209,88 @@ class admin extends CI_Controller {
             {
                 $where = $this->input->post('ijadwal_id2');
                 $this->_flashAndRedirect(
-			$this->jadwal_mdl->delJadwal($where),'Jadwal Berhasil di Hapus','Gagal Menghapus Jadwal','SAVEEDITJADWAL',''
+			$this->jadwal_mdl->delJadwal($where),'Jadwal Berhasil di Hapus','Gagal Menghapus Jadwal','SAVEEDITJADWAL','T'
 		); 
             }
+            elseif($btnAction == 'Tambah')
+            {
+                $jadwal_id = $this->jadwal_mdl->getLastId();
+                $jadwal_id++;
+		$semester = $this->input->post('semester');
+                
+                //ical
+                
+                //simpan ke google calendar
+                //event dikirim ke library
+                $event_id =$this->g_event->get_new_event_id('JD');
+                //data jam
+                $jam_jadwal = $this->jadwal_mdl->getDataMatkul($this->input->post('ihjam2'),$this->input->post('dmatakuliah2'),$this->input->post('ikelas2'),$this->input->post('ddosen2'));
+//                //end
+//                
+                $start_date = nice_date($tgl_jadwal,'Y-m-d').'T'.$jam_jadwal->JAM_MULAI.'+07:00';
+                $end_date = nice_date($tgl_jadwal,'Y-m-d').'T'.(($jam_jadwal->JAM_JK+$jam_jadwal->JAM_MK)-1).':45:00+07:00';
+//                
+                //print($start_date.'<br>'.$end_date);exit;
+                $summary = ''.$jam_jadwal->MATA_KULIAH_NAMA.' R'.$this->input->post('druangan2');
+                
+                $g_event = array(
+                    'id' => $event_id,
+                    'summary' => $summary,
+                    'location' => 'Politeknik Caltex Riau R'.$this->input->post('druangan2'),
+                    'description' => 'Jadwal Perkuliahan Rutin',
+                    'start' => array(
+                    'dateTime' => $start_date,
+                    'timeZone' => 'Asia/Jakarta',
+                    ),
+                    'hangoutLink' => '-',
+                    'end' => array(
+                      'dateTime' => $end_date,
+                      'timeZone' => 'Asia/Jakarta',
+                    ),
+                      'recurrence' => array(
+                    'RRULE:FREQ=WEEKLY;COUNT=20'
+                  ),
+                    'attendees' => array(
+//                      array('email' => $jam_jadwal->EMAIL_KLS),
+                      array('email' => $jam_jadwal->EMAIL_DSN),
+                      array('email' => 'wafhigamers@gmail.com'),
+//                      array('email' => 'ekadeddy@alumni.pcr.ac.id'),
+//                      array('email' => '15tka@mahasiswa.pcr.ac.id'), 
+                    ),
+                    'reminders' => array(
+                      'useDefault' => FALSE,
+                      'overrides' => array(
+                        array('method' => 'email', 'minutes' => 24 * 60),
+                        array('method' => 'popup', 'minutes' => 10),
+                      ),
+                    ),
+                  );
+                
+                //kirim ke librari untuk di create eventa di google calendar
+                $this->g_synch->sync_i_c_jd($g_event);
+                //end
+                //
+                
+                
+		$data_jadwal =
+			array('JADWAL_ID' => $jadwal_id,
+                                'EVENT_ID' => $event_id,
+				'MATA_KULIAH_ID' => $this->input->post('dmatakuliah2'),
+				'DOSEN_ID' => $this->input->post('ddosen2'),
+				'KELAS_ID' => $this->input->post('ikelas2'),
+				'RUANGAN_ID' => $this->input->post('druangan2'),
+				'JAM_KULIAH_ID' => $this->input->post('ihjam2'),
+				'HARI' => $this->input->post('ihari2'),
+				'STATUS' => 'AKTIF',
+                                'DTMUPD' => date('Y-m-d H:i:s'));
+                
+                //print_r($data_jadwal);exit;
+                
+		$this->_flashAndRedirect(
+			$this->jadwal_mdl->saveJadwal($data_jadwal),'Berhasil membuat jadwal','Gagal membuat jadwal','SAVEJADWAL',$semester
+		);
+            }
+                
         }
         
         function ajax_edit_jadwal()
@@ -373,15 +498,100 @@ class admin extends CI_Controller {
             
             $this->load->view('pages/admin/admin_approval_dashboard_view',$data);
         }
+        Public function addEvent()
+    {
+        // $result=$this->evn_mdl->addEvent();
+        // echo $result;
+        //service google
+            $gClient = new Google_Client();
+            $gClient->setAccessToken($_SESSION['token']);
+            $googleCal = new Google_CalendarService($gClient);
+            //end service google
+            
+             //service calendar
+            $title = $this->input->post('title');
+            $description = $this->input->post('description');
+            $color = $this->input->post('color');
+            $start = $this->input->post('start');
+            $start_time = $this->input->post('start_time');
+            $end = $this->input->post('end');
+            $end_time = $this->input->post('end_time');
+           
+          $event = new Google_Event(array(
+           'summary' => $title,
+           'location' => 'Politeknik Caltex Riau',
+           'description' => $description,
+           'start' => array(
+             'dateTime' => $start.'T'.$start_time,
+             'timeZone' => 'Asia/Jakarta',
+           ),
+           'end' => array(
+             'dateTime' => $start.'T'.$start_time,
+             'timeZone' => 'Asia/Jakarta',
+           ),
+           'colorId' => $color,
+           'attendees' => array(
+             array('email' => 'shelinna15tk@pcr.ac.id'),
+             array('email' => 'rahmat@alumni.pcr.ac.id'),
+           ),
+           'reminders' => array(
+             'useDefault' => FALSE,
+             'overrides' => array(
+               array('method' => 'email', 'minutes' => 24 * 60),
+               array('method' => 'popup', 'minutes' => 10),
+             ),
+           ),
+         ));
+            $calendarId = 'pcr.ac.id_lf7v1s4ngrsepmjd7niva64h1s@group.calendar.google.com';
+    
+            $event = $googleCal->events->insert($calendarId, $event);
+            
+    }
+    /*Update Event */
+    Public function updateEvent()
+    {
+        $result=$this->evn_mdl->updateEvent();
+        echo $result;
+    }
+    /*Delete Event*/
+    Public function deleteEvent()
+    {
+        $result=$this->evn_mdl->deleteEvent();
+        echo $result;
+    }
+    Public function dragUpdateEvent()
+    {   
+
+        $result=$this->evn_mdl->dragUpdateEvent();
+        echo $result;
+    }
         public function approvalSave()
         {
+//            //service google
+//            $gClient = new Google_Client();
+//            $gClient->setAccessToken($_SESSION['token']);
+//            $googleCal = new Google_CalendarService($gClient);
+//            $calendarId = 'pcr.ac.id_gpi2bjmlveu6rkgmipdkn4saqs@group.calendar.google.com';
+//            //end service google
+//            
             $jadwal_ganti_id = $this->input->post('jadwal_ganti_id');
             //$jadwal_id = $this->input->post('');
             $approval_status = $this->input->post('approval_status');
             $ket = $this->input->post('iket');
+            $tjam = $this->input->post('tjam');
             $approv_by = $this->ses_data['user_email'];
             $reject_by = $this->ses_data['user_email'];
-
+            
+            $event_id = $this->evn_mdl->getLastIdEventTemp();
+            
+            if($event_id==null)
+            {
+                $event_id = 'eventjdgsip000001';
+            }
+            else
+            {
+             $event_id++;   
+            }
             $jadwal_ganti_hostory_id = $this->jadwal_mdl->getLastIdJadwalGantiHistory();
             
             if ($approval_status == 'Y')
@@ -396,18 +606,67 @@ class admin extends CI_Controller {
                 $status = 'RJC';
                 $successMessage = 'Reject Berhasil';
             }
+            if($ket==null)
+            {
+                $ket ='cuti';
+            }
           
             $jadwal_ganti_hostory_id++;
             $where = array('jdg.JADWAL_GANTI_ID' => $jadwal_ganti_id);
             $oldjadwalGanti = $this->jadwal_mdl->getJadwalGantiById($where);
             foreach ($oldjadwalGanti as $row)
             {
+                $start_date = nice_date($row->TANGGAL, 'Y-m-d').'T'.$row->JAM_MULAI.'+07:00';
+                $end_date = $row->TANGGAL.'T'.(($row->JAM_JK+($row->JAM_MK*$row->JUMLAH_JAM))-1).':45:00+07:00';
+                $email_kls = $row->EMAIL_KLS;
+                $email_dsn = $row->EMAIL;
+                $summary ='Pergantian Jadwal Kuliah '.$row->MATA_KULIAH_NAMA.' Oleh Dosen '.$row->DOSEN_NAMA;
+                 
+
+               //event dikirim ke library
+                $g_event = array(
+                    'id' => $event_id,
+                    'summary' => $summary,
+                    'location' => 'Politeknik Caltex Riau R'.$row->RUANGAN_ID,
+                    'description' => $row->KET,
+                    'start' => array(
+                    'dateTime' => $start_date,
+                    'timeZone' => 'Asia/Jakarta',
+                    ),
+                    'end' => array(
+                      'dateTime' => $end_date,
+                      'timeZone' => 'Asia/Jakarta',
+                    ),
+                      'recurrence' => array(
+                    'RRULE:FREQ=DAILY;COUNT=1'
+                  ),
+                    'attendees' => array(
+//                      array('email' => $email_kls),
+//                      array('email' => $email_dsn),
+//                      array('email' => 'wafhigamers@gmail.com'),
+//                      array('email' => 'ekadeddy@alumni.pcr.ac.id'),
+//                      array('email' => '15tka@mahasiswa.pcr.ac.id'), 
+                    ),
+                    'reminders' => array(
+                      'useDefault' => FALSE,
+                      'overrides' => array(
+                        array('method' => 'email', 'minutes' => 24 * 60),
+                        array('method' => 'popup', 'minutes' => 10),
+                      ),
+                    ),
+                  );
+                
+                //kirim ke librari untuk di create eventa di google calendar
+                $synch_gcal = $this->g_synch->sync_i_c_jd_ganti($g_event);
+                //end
+
                 //UPDATE STATUS
                 $datajadwalGanti = 
                     array ('STATUS' => $status,
                         'APPROVAL_BY' => $approv_by,
+                        'EVENT_ID' => $event_id,
                         'REJECT_BY' => $reject_by,
-                        'KET' => $ket,
+                        'KET_ADMIN' => $ket,
                         'DTMUPD' => date('Y-m-d H:i:s'));
                 //INSERT HOSTORY
                 $datajadwalGantiHistory = 
@@ -415,21 +674,45 @@ class admin extends CI_Controller {
                         'JADWAL_GANTI_ID' => $jadwal_ganti_id,
                         'JADWAL_ID' => $row->JADWAL_ID,
                         'TANGGAL' => $row->TANGGAL,
-                        'PERTEMUAN_KE' => 0,
+                        'PERTEMUAN_KE' => '0',
                         'RUANGAN_ID' => $row->RUANGAN_ID,
                         'JAM_KULIAH_ID' => $row->JAM_KULIAH_ID,
                         'STATUS' => $status,
                         'APPROVAL_BY' => $approv_by,
                         'REJECT_BY' => $reject_by,
                         'HARI' => $row->HARI,
-                        'KET' => $ket,
+                        'KET_ADMIN' => $ket,
                         'DTMUPD' => date('Y-m-d H:i:s'));
-            }
-            
-            
+                $data_mk = $this->mk_mdl->getMataKuliahJadwalId($row->JADWAL_ID);
+                 
+                 //event local
+            $data = array('id' =>$event_id,
+            'title' => $summary,
+            'description' => $row->KET,
+            'color' => '#40E0D0',
+            'start' => $start_date,
+            'end' =>$end_date,
+            'dtmupd' => date('Y-m-d H:i:s'),
+            );
+        
+        //simpan event local
+        $this->evn_mdl->addEventTemp($data,$event_id);
+
             $this->_flashAndRedirect(
                     $this->approval_mdl->reqSaveApproval($where,$datajadwalGanti,$datajadwalGantiHistory),$successMessage,'Approval Gagal Dilakukan!','APPROVALSAVE',$approval_status);
-            
+            }   
+        }
+        public function getEventGoogle()
+        {
+              //service google
+//            $gClient = new Google_Client();
+//            $gClient->setAccessToken($_SESSION['token']);
+//            $googleCal = new Google_CalendarService($gClient);
+            //end service google
+//            $calendarId = 'pcr.ac.id_lf7v1s4ngrsepmjd7niva64h1s@group.calendar.google.com';
+//            $calendar = $googleCal->calendars->get($calendarId);
+
+            echo $calendar->getSummary();
         }
         
         public function ajaxApproval()
@@ -458,7 +741,7 @@ class admin extends CI_Controller {
         {
               $data['user_nama']= $this->ses_data['user_nama'];
             $data['user_image']= $this->ses_data['user_images'];
-            $this->load->view('public/tes_kalender2',$data);
+            $this->load->view('public/kalendar_new',$data);
         }
 
 
@@ -466,6 +749,7 @@ class admin extends CI_Controller {
 	{
 		if ( $successful == true ) {
                     $this->session->set_flashdata('feedback', $successMessage);
+                    $this->session->set_flashdata('txt_alert', 'Berhasil');
                         if ($param == 'T')
                         {
                             $this->session->set_flashdata('feedback_class', 'alert-warning');
@@ -477,27 +761,12 @@ class admin extends CI_Controller {
 			
 		} else {
 			$this->session->set_flashdata('feedback', $failureMessage);
+                        $this->session->set_flashdata('txt_alert', 'Gagal');
 			$this->session->set_flashdata('feedback_class', 'alert-danger');
 		}
 
 		HGetRedirectJadwal($modul,$param);
 	}
 
-	//untuk melakukan cek session
-	public function __construct()
-	{
-		parent::__construct();
-                date_default_timezone_set('Asia/Jakarta');
-		if ( ! $this->session->userdata('logged_in') ){
-			$this->ses_data = null;
-			return redirect('logout');
-		}
-		else
-		{
-			$this->ses_data =  $this->session->userdata('logged_in');
-
-			if ( $this->ses_data['user_akses']  != 'adm' )
-				return redirect('login');
-		}
-	}
+	
 }

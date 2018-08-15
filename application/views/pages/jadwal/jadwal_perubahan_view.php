@@ -1,5 +1,5 @@
 <?php
-	$this->load->view('layout/header_view');
+	$this->load->view('layout/header_w_cal_view');
 	$this->load->view($navbar);
         $f_attribute2 = array(
             'class'     => 'form-horizontal hidden',
@@ -44,6 +44,7 @@
                                                     <tr>
                                                       <th style="width: 10px">#</th>
                                                       <th>Tanggal</th>
+                                                      <th>Dosen</th>
                                                       <th>Kelas</th>
                                                       <th>Mata Kuliah</th>
                                                       <th>Jam</th>
@@ -66,8 +67,10 @@
                                                         ?>
                                                     <tr class="<?= $read ?>">
                                                     
-                                                        <td ><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $no.' '.$row->READ_STATUS.' '.$row->N_EMAIL   ?></a></td>
+                                                        <td ><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $no ?></a></td>
+<!--                                                        <td ><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $no.' '.$row->READ_STATUS.' '.$row->N_EMAIL   ?></a></td>-->
                                                         <td><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= ucfirst($row->HARI).', '.date(' d - M - Y ',strtotime($row->TANGGAL))?></a></td>
+                                                        <td><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $row->DOSEN_NAMA?></a></td>
                                                         <td><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $row->KELAS_NAMA?></a></td>
                                                         <td><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $row->MATA_KULIAH_NAMA.' '.$row->KELAS_NAMA ?></a></td>
                                                         <td><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $row->JAM_MULAI.' - '.(($row->JAM_JK+$row->JAM_MK)-1).':45:00' ?></a></td>
@@ -101,6 +104,7 @@
                                                     <tr>
                                                       <th style="width: 10px">#</th>
                                                       <th>Tanggal</th>
+                                                      <th>Dosen</th>
                                                       <th>Kelas</th>
                                                       <th>Mata Kuliah</th>
                                                       <th>Jam</th>
@@ -125,6 +129,7 @@
                                                     
                                                         <td ><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $no ?></a></td>
                                                         <td><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= ucfirst($row->HARI).', '.date(' d - M - Y ',strtotime($row->TANGGAL))?></a></td>
+                                                        <td><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $row->DOSEN_NAMA?></a></td>
                                                         <td><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $row->KELAS_NAMA?></a></td>
                                                         <td><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $row->MATA_KULIAH_NAMA.' '.$row->KELAS_NAMA ?></a></td>
                                                         <td><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $row->JAM_MULAI.' - '.(($row->JAM_JK+$row->JAM_MK)-1).':45:00' ?></a></td>
@@ -158,6 +163,7 @@
                                                     <tr>
                                                       <th style="width: 10px">#</th>
                                                       <th>Tanggal</th>
+                                                      <th>Dosen</th>
                                                       <th>Kelas</th>
                                                       <th>Mata Kuliah</th>
                                                       <th>Jam</th>
@@ -178,8 +184,9 @@
                                                         }
                                                         ?>
                                                     <tr class="<?= $read ?>">
-                                                        <td ><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $no.' '.$row->READ_STATUS.' '.$row->N_EMAIL  ?></a></td>
+                                                        <td ><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $no ?></a></td>
                                                         <td><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= ucfirst($row->HARI).', '.date(' d - M - Y ',strtotime($row->TANGGAL))?></a></td>
+                                                        <td><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $row->DOSEN_NAMA?></a></td>
                                                         <td><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $row->KELAS_NAMA?></a></td>
                                                         <td><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $row->MATA_KULIAH_NAMA.' '.$row->KELAS_NAMA ?></a></td>
                                                         <td><a href="#" class="text-black" onclick="readNotif2('<?= $row->JADWAL_GANTI_ID ?>')"><?= $row->JAM_MULAI.' - '.(($row->JAM_JK+$row->JAM_MK)-1).':45:00' ?></a></td>
@@ -217,9 +224,31 @@
                                                 </div>
                                         <?php endif; ?>
 
+                    
+<!--                    Calendar-->
+      <div class="row">
+            <div class="col-lg-12">   
+            <div class="box box-primary">
+                <div class="box-body no-padding">
+                  <!-- THE CALENDAR -->
+                  <div id="calendar"></div>
+                </div>
+            </div>
+          </div>
+      </div>
+             <!--                    END Calendar-->       
 		</section>
 		<!-- /.content -->
 	</div>
 	<!-- /.content-wrapper -->
 
 <?php $this->load->view('layout/footer_view'); ?>
+<!--Calendar        -->
+<!--<script src="../bower_components/fullcalendar/dist/fullcalendar.min.js"></script>-->
+<script src="<?php echo base_url('/assets/templates/AdminLTE-2.4.3/bower_components/fullcalendar/dist/fullcalendar.min.js') ?>"></script>
+<script src="<?php echo base_url('/assets/js/calendar/calendar_services.js') ?>"></script>
+
+
+<script src='<?php echo base_url() ?>assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js'></script>  
+<link rel="stylesheet" href="<?php echo base_url('assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') ?>">
+

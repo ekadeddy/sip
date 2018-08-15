@@ -18,7 +18,7 @@ class notif extends CI_Controller {
             }
             elseif($akses == 'Dosen')
             {
-                $where =  array('dsn.EMAIL' => $this->ses_data['user_email']);
+                $where =  array('dsn.EMAIL' => $this->ses_data['user_email'], 'left');
             }
             else
             {
@@ -38,7 +38,7 @@ class notif extends CI_Controller {
         public function notifDetail()
         {
             $data['user_nama']= $this->ses_data['user_nama'];
-            $data['user_image']= $this->ses_data['user_images'];
+            $data['user_image']=  $this->ses_data['user_images'];
             $data['user_akses']= $this->ses_data['user_akses'];
             
             $jadwal_ganti_id = $this->input->post('ijadwal_ganti_id');
@@ -72,6 +72,12 @@ class notif extends CI_Controller {
             $data['navbar']= HGetNavbarUser($this->ses_data['user_akses']);
             $this->load->view('pages/notif/notif_detail_view',$data);
         }
+        
+        public function refreshNotif()
+        {
+            
+        }
+
 //	public function readNotif($jadwal_ganti_id)
 //        {
 //            

@@ -11,7 +11,16 @@ class Mata_Kuliah_model extends CI_Model
 	{
 		return $this->db->get('tb_mata_kuliah')->result();
 	}
-        
+        public function getMataKuliahJadwalId($id)
+        {
+            return $this->db->select('*')
+                    ->from('tb_mata_kuliah mk')
+                    ->join('tb_jadwal jd','mk.MATA_KULIAH_ID = jd.MATA_KULIAH_ID')
+                    ->where('jd.JADWAL_ID',$id)
+                    ->get()
+                    ->row();
+        }
+
         public function getMataKuliahByDosenToKelas($dosen,$kelas)
         {
             $query = $this->db->select('mk.MATA_KULIAH_ID,mk.MATA_KULIAH_NAMA,mk.STATUS,jd.JADWAL_ID')

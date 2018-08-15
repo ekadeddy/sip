@@ -23,7 +23,7 @@ $this->load->view($navbar);
 				<!-- Profile Image -->
 				<div class="box box-primary">
 					<div class="box-body box-profile">
-						<img class="profile-user-img img-responsive img-circle" src="<?= base_url($user_image) ?>" alt="User profile picture">
+						<img class="profile-user-img img-responsive img-circle" src="<?= $user_image ?>" alt="User profile picture">
 
 						<h3 class="profile-username text-center"><?= $user_nama  ?></h3>
 

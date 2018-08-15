@@ -30,6 +30,11 @@ if ( ! function_exists('HNotif_Helper'))
                 $where = "WHERE dsn.EMAIL ='$email'";
                 $where_notif = "where jdn.EMAIL = '$email' and jdn.NOTIF_TIPE ='DSN'";
             }
+             if($akses == 'Mahasiswa')
+            {
+                $where = "WHERE mhs.EMAIL ='$email'";
+                $where_notif = "where jdn.EMAIL = '$email' and jdn.NOTIF_TIPE ='DSN'";
+            }
             //print($akses); exit;
             
             $notifUnread = $CI->notif_mdl->getJumlahNotifUnread($where,$where_notif);

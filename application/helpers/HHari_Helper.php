@@ -41,48 +41,50 @@ if ( ! function_exists('HHari_Helper'))
             $day = date('D', strtotime($date));
             if($day == 'Mon')
             {
-                return 'senin';
+                return 'SENIN';
             }
             elseif($day == 'Tue')
             {
-                return 'selasa';
+                return 'SELASA';
             }
             elseif($day == 'Wed')
             {
-                return 'rabu';
+                return 'RABU';
             }
             elseif($day == 'Thu')
             {
-                return 'kamis';
+                return 'KAMIS';
             }
             elseif($day == 'Fri')
             {
-                return 'jumat';
+                return 'JUMAT';
             }
             elseif($day == 'Sat')
             {
-                return 'sabtu';
+                return 'SABTU';
             }
             elseif($day == 'Sun')
             {
-                return 'minggu';
+                return 'MINGGU';
             }
         }
         function HgetStatusTanggal($date)
         {
-            //$dt = date("Y-m-d");
+            $dt = date("Y-m-d");
             //echo date( "Y-m-d", strtotime( "$dt +1 day" ) );
             $dateNows = date('Y-m-d');
-            $dateNow = date("Y-m-d", strtotime( "$dateNows +3 day" ) );
+            //$dateNow = date("Y-m-d", strtotime( "$dateNows +3 day" ) );
             $dateChange =  nice_date($date, 'Y-m-d');
             
-            if($dateChange <= $dateNow)
+            if($dateChange >= $dt)
             {
-                return false;
+                //print('a');
+                return true;
             }
             else
             {
-                return true;  
+                // print('b');
+                return false; 
             }
             
         }

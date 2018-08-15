@@ -28,6 +28,30 @@
 				Approval Ganti Jadwal
 			</h1>
 			<ol class="breadcrumb">
+                            
+                            <?php   if( $feedback = $this->session->flashdata('feedback')):
+                                $feedback_class = $this->session->flashdata('feedback_class'); 
+                                $txt_alert = $this->session->flashdata('txt_alert');
+                    ?>
+                    
+                                <!--        Toastr    -->
+
+                                <div id="snackbar">
+                                    <div class="alert alert-dismissible <?= $feedback_class ?>">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        <h4><i class="icon fa fa-check"></i> <?= $txt_alert ?></h4>
+                                     <?= $feedback ?>
+                                    </div>
+                                </div>
+                            <!--end toastr -->
+                    
+                               <script type="text/javascript"> 
+                                    var x = document.getElementById("snackbar");
+                                    x.className = "show";
+                                    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 6000);
+                                </script>
+                    <?php   endif; ?>
+                            
 				<li><a href="#"><i class="fa fa-dashboard"></i> Admin</a></li>
 				<li class="active">Approval Ganti Jadwal </li>
 			</ol>
@@ -89,20 +113,7 @@
                                     ?>
 				</div>
 			</div>
-                        <?php if( $feedback = $this->session->flashdata('feedback')):
-                                                $feedback_class = $this->session->flashdata('feedback_class');
-                                                ?>
-                                                <div class="row">
-                                                        <div class="col-lg-4"></div>
-                                                        <div class="col-lg-4">
-                                                                <div class="alert alert-dismissible text-center <?= $feedback_class ?> ">
-                                                                        <?= $feedback ?>
-                                                                </div>
-                                                        </div>
-                                                        <div class="col-lg-4"></div>
-                                                </div>
-                                        <?php endif; ?>
-
+                        
 		</section>
 		<!-- /.content -->
 	</div>
@@ -111,6 +122,7 @@
 <?php $this->load->view('layout/footer_view'); ?>
        
 <script src="<?php echo base_url('/assets/js/JS_admin_approval.js') ?>"></script>
+<script src="<?php echo base_url('/assets/js/toastr.js') ?>"></script>
         
  <div class="modal fade" id="modal-default">
           <div class="modal-dialog">

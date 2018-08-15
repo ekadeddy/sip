@@ -125,3 +125,49 @@ else
     <script src="<?php echo base_url('/assets/js/JS_admin_read_notif.js') ?>"></script>
 <?php }
 ?>
+<script type="text/javascript">
+    // Toast Notification
+//    $(window).load(function() {
+//        setTimeout(function() {
+//            Materialize.toast('<span>Hiya! I am a toast.</span>', 1500);
+//        }, 3000);
+//        setTimeout(function() {
+//            Materialize.toast('<span>You can swipe me too!</span>', 3000);
+//        }, 5500);
+//        setTimeout(function() {
+//            Materialize.toast('<span>You have new order.</span><a class="btn-flat yellow-text" href="#">Read<a>', 3000);
+//        }, 18000);
+//    });
+    var a =8;
+    //var a = parseInt($("#cou").val());
+    var b=3;
+    var cou = $("#cou").val();
+    var base_urls= $("#urls").val();
+
+    var auto_refresh = setInterval(
+        function ()
+        {
+            $('#load').load(base_urls+'/dash-ref/?_=').fadeIn("slow");
+           // alert (cou);
+
+//            if (a%2==0){
+//                alert ($('#load').load(base_urls+'/dash-ref/?_=').fadeIn("slow"));
+//               // alert(cou);
+//                $("#cou").val(a);
+//                alert(a+' genap');
+//            }
+//            if(a%2==1){
+//                $('#load').load(base_urls+'?_=').fadeIn("slow");
+//                //alert(cou);
+//
+//                $("#cou").val(cou);
+//                alert(a+' ganjil');
+//            }
+//            a=a+1;
+
+        }, 100000); // refresh setiap 10000 milliseconds
+
+
+
+
+</script>

@@ -82,13 +82,15 @@
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="<?= base_url($user_image) ?>" class="user-image" alt="User Image">
+                            <img src="<?= $user_image ?>" class="user-image" alt="User Image">
+<!--                            <img src="<?= base_url($user_image) ?>" class="user-image" alt="User Image">-->
                             <span class="hidden-xs"><?= $user_nama ?></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <img src="<?= base_url($user_image) ?>" class="img-circle" alt="User Image">
+                                <img src="<?= $user_image ?>" class="img-circle" alt="User Image">
+<!--                                <img src="<?= base_url($user_image) ?>" class="img-circle" alt="User Image">-->
 
                                 <p>
                                     <?= $user_nama ?>
@@ -123,7 +125,8 @@
             <!-- Sidebar user panel -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="<?= base_url($user_image) ?>" class="img-circle" alt="User Image XX">
+                    <img src="<?= $user_image ?>" class="img-circle" alt="User Image XX">
+<!--                    <img src="<?= base_url($user_image) ?>" class="img-circle" alt="User Image XX">-->
                 </div>
                 <div class="pull-left info">
                     <p><?= $user_nama; ?></p>

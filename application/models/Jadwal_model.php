@@ -171,15 +171,16 @@ class Jadwal_model extends CI_Model
                     ->from('tb_jadwal_ganti jdg')
                     ->join('tb_jadwal jd','jdg.JADWAL_ID = jd.JADWAL_ID')
                     ->join('tb_mata_kuliah mk','jd.MATA_KULIAH_ID = mk.MATA_KULIAH_ID')
-                    ->join('tb_dosen dsn','jd.DOSEN_ID = dsn.DOSEN_ID')
+                    ->join('tb_dosen dsn','jd.DOSEN_ID = dsn.DOSEN_ID','left')
                     ->join('tb_jam_kuliah jk','jdg.JAM_KULIAH_ID = jk.JAM_KULIAH_ID')
                     ->join('tb_kelas kls','jd.KELAS_ID = kls.KELAS_ID')
                     ->join('tb_jadwal_notif jdn','jdg.JADWAL_GANTI_ID = jdn.JADWAL_GANTI_ID','left')
-                    ->join('tb_ruangan r','jdg.RUANGAN_ID = r.RUANGAN_ID')
+                    ->join('tb_ruangan r','jdg.RUANGAN_ID = r.RUANGAN_ID','left')
                     ->join('tb_mahasiswa mhs','kls.KELAS_ID = mhs.KELAS_ID')
                     ->where('jdg.TANGGAL >=', date('Y-m-d'))
                     ->where($where)
                     ->where('jdg.STATUS','REQ')
+                    ->order_by('jdg.DTMUPD')
                     ->group_by('jdg.JADWAL_GANTI_ID')
                     ->get();
             return $query->result();
@@ -258,7 +259,7 @@ class Jadwal_model extends CI_Model
         }
          function getJadwalGantiDetail1($where,$jadwal_ganti_id)
         {
-            $query = $this->db->select('jdg.DTMUPD as TGL_ACT, jdg.REJECT_BY, jdg.APPROVAL_BY, jdg.STATUS as JDG_STAT, dsn.DOSEN_INISIAL, mk.STATUS,jdg.KET, jk.JAM as JAM_JK, mk.JAM as JAM_MK, jk.JAM_KULIAH_MULAI as JAM_MULAI, jd.JADWAL_ID, jdg.JADWAL_GANTI_ID, jdg.TANGGAL, dsn.EMAIL, dsn.DOSEN_NAMA, kls.KELAS_NAMA, r.RUANGAN_ID, jdg.HARI, jdg.JAM_KULIAH_ID, mk.JAM, mk.STATUS, mk.MATA_KULIAH_NAMA')
+            $query = $this->db->select('jdg.JUMLAH_JAM, jdg.DTMUPD as TGL_ACT, jdg.REJECT_BY, jdg.APPROVAL_BY, jdg.STATUS as JDG_STAT, dsn.DOSEN_INISIAL, mk.STATUS,jdg.KET, jk.JAM as JAM_JK, mk.JAM as JAM_MK, jk.JAM_KULIAH_MULAI as JAM_MULAI, jd.JADWAL_ID, jdg.JADWAL_GANTI_ID, jdg.TANGGAL, dsn.EMAIL, dsn.DOSEN_NAMA, kls.KELAS_NAMA, r.RUANGAN_ID, jdg.HARI, jdg.JAM_KULIAH_ID, mk.JAM, mk.STATUS, mk.MATA_KULIAH_NAMA')
                     ->from('tb_jadwal_ganti jdg')
                     ->join('tb_jadwal jd','jdg.JADWAL_ID = jd.JADWAL_ID')
                     ->join('tb_mata_kuliah mk','jd.MATA_KULIAH_ID = mk.MATA_KULIAH_ID')
@@ -275,13 +276,13 @@ class Jadwal_model extends CI_Model
         }
         function getJadwalHarianDosen($hari,$dosen,$jam)
         {
-            $query = $this->db->select('jd.JAM_KULIAH_ID as JAM_KULIAH_ID, r.RUANGAN_ID, kls.KELAS_NAMA,MATA_KULIAH_NAMA, dsn.DOSEN_NAMA, JAM_KULIAH_MULAI as JAM_MULAI, jk.JAM as JAM_JK, mk.JAM as JAM_MK')
+            $query = $this->db->select('jd.JADWAL_ID, jd.JAM_KULIAH_ID as JAM_KULIAH_ID, r.RUANGAN_ID, kls.KELAS_NAMA,MATA_KULIAH_NAMA, dsn.DOSEN_NAMA, JAM_KULIAH_MULAI as JAM_MULAI, jk.JAM as JAM_JK, mk.JAM as JAM_MK')
                     ->from('tb_mata_kuliah mk')
-                    ->join('tb_jadwal jd','mk.MATA_KULIAH_ID = jd.MATA_KULIAH_ID')
-                    ->join('tb_dosen dsn','jd.DOSEN_ID = dsn.DOSEN_ID')
-                    ->join('tb_jam_kuliah jk','jd.JAM_KULIAH_ID = jk.JAM_KULIAH_ID')
-                    ->join('tb_kelas kls','jd.KELAS_ID = kls.KELAS_ID')
-                    ->join('tb_ruangan r','jd.RUANGAN_ID = r.RUANGAN_ID')
+                    ->join('tb_jadwal jd','mk.MATA_KULIAH_ID = jd.MATA_KULIAH_ID','left')
+                    ->join('tb_dosen dsn','jd.DOSEN_ID = dsn.DOSEN_ID','left')
+                    ->join('tb_jam_kuliah jk','jd.JAM_KULIAH_ID = jk.JAM_KULIAH_ID','left')
+                    ->join('tb_kelas kls','jd.KELAS_ID = kls.KELAS_ID','left')
+                    ->join('tb_ruangan r','jd.RUANGAN_ID = r.RUANGAN_ID','left')
                     ->where('jd.HARI',$hari)
                     ->where('dsn.EMAIL',$dosen)
                     ->where('jd.JAM_KULIAH_ID',$jam)
@@ -298,18 +299,25 @@ class Jadwal_model extends CI_Model
         }
         function getJadwalGantiById($where)
         {
-            $query = $this->db->select('*')
+            $query = $this->db->select('kls.EMAIL as EMAIL_KLS,jdg.JUMLAH_JAM, jdg.DTMUPD as TGL_ACT, jdg.REJECT_BY, jdg.APPROVAL_BY, jdg.STATUS as JDG_STAT, dsn.DOSEN_INISIAL, mk.STATUS,jdg.KET, jk.JAM as JAM_JK, mk.JAM as JAM_MK, jk.JAM_KULIAH_MULAI as JAM_MULAI, jd.JADWAL_ID, jdg.JADWAL_GANTI_ID, jdg.TANGGAL, dsn.EMAIL, dsn.DOSEN_NAMA, kls.KELAS_NAMA, r.RUANGAN_ID, jdg.HARI, jdg.JAM_KULIAH_ID, mk.JAM, mk.STATUS, mk.MATA_KULIAH_NAMA, jdg.KET')
+                    ->from('tb_jadwal_ganti jdg')
+                    ->join('tb_jadwal jd','jdg.JADWAL_ID = jd.JADWAL_ID')
+                    ->join('tb_jam_kuliah jk','jdg.JAM_KULIAH_ID = jk.JAM_KULIAH_ID')
+                    ->join('tb_dosen dsn','jd.DOSEN_ID = dsn.DOSEN_ID','left')
+                    ->join('tb_mata_kuliah mk','jd.MATA_KULIAH_ID = mk.MATA_KULIAH_ID')
+                    ->join('tb_kelas kls','jd.KELAS_ID = kls.KELAS_ID')
+                    ->join('tb_ruangan r','jdg.RUANGAN_ID = r.RUANGAN_ID','left')
                     ->where($where)
-                    ->get('tb_jadwal_ganti jdg');
+                    ->get();
             
             return $query->result();
         }
-                function getJadwalHarianKelas($hari,$kelas,$jam)
+        function getJadwalHarianKelas($hari,$kelas,$jam)
         {
             $query = $this->db->select('jd.JADWAL_ID,jd.JAM_KULIAH_ID as JAM_KULIAH_ID, r.RUANGAN_ID, kls.KELAS_NAMA,MATA_KULIAH_NAMA, dsn.DOSEN_NAMA, JAM_KULIAH_MULAI as JAM_MULAI, jk.JAM as JAM_JK, mk.JAM as JAM_MK')
                     ->from('tb_mata_kuliah mk')
-                    ->join('tb_jadwal jd','mk.MATA_KULIAH_ID = jd.MATA_KULIAH_ID')
-                    ->join('tb_dosen dsn','jd.DOSEN_ID = dsn.DOSEN_ID')
+                    ->join('tb_jadwal jd','mk.MATA_KULIAH_ID = jd.MATA_KULIAH_ID','left')
+                    ->join('tb_dosen dsn','jd.DOSEN_ID = dsn.DOSEN_ID','left')
                     ->join('tb_jam_kuliah jk','jd.JAM_KULIAH_ID = jk.JAM_KULIAH_ID')
                     ->join('tb_kelas kls','jd.KELAS_ID = kls.KELAS_ID')
                     ->join('tb_ruangan r','jd.RUANGAN_ID = r.RUANGAN_ID')
@@ -321,6 +329,29 @@ class Jadwal_model extends CI_Model
             if($query->num_rows() > 0)
             {
                 return $query->result();
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
+        function getJadwalLengkapByJadwalId($jadwal_id)
+        {
+            $query = $this->db->select('jd.JADWAL_ID,jd.JAM_KULIAH_ID as JAM_KULIAH_ID, r.RUANGAN_ID, kls.KELAS_NAMA,MATA_KULIAH_NAMA, dsn.DOSEN_NAMA, JAM_KULIAH_MULAI as JAM_MULAI, jk.JAM as JAM_JK, mk.JAM as JAM_MK, mk.STATUS as MK_STATUS')
+                    ->from('tb_mata_kuliah mk')
+                    ->join('tb_jadwal jd','mk.MATA_KULIAH_ID = jd.MATA_KULIAH_ID','left')
+                    ->join('tb_dosen dsn','jd.DOSEN_ID = dsn.DOSEN_ID','left')
+                    ->join('tb_jam_kuliah jk','jd.JAM_KULIAH_ID = jk.JAM_KULIAH_ID')
+                    ->join('tb_kelas kls','jd.KELAS_ID = kls.KELAS_ID')
+                    ->join('tb_ruangan r','jd.RUANGAN_ID = r.RUANGAN_ID')
+                    ->where('jd.JADWAL_ID',$jadwal_id)
+                    ->order_by('jd.JAM_KULIAH_ID','asc')
+                    ->get();
+            if($query->num_rows() > 0)
+            {
+                return $query->row();
+                 //return false;
             }
             else
             {
@@ -353,7 +384,21 @@ class Jadwal_model extends CI_Model
                        return false;
                    }
                }
-        
+               
+               public function getDataMatkul($jam_id,$matkul_id,$kelas_id,$dosen_id)
+               {
+                   $query = $this->db->select('dsn.EMAIL as EMAIL_DSN,jk.JAM_KULIAH_MULAI as JAM_MULAI, mk.JAM as JAM_MK,jk.JAM as JAM_JK,mk.MATA_KULIAH_NAMA,kls.EMAIL as EMAIL_KLS')
+                           ->from('tb_jam_kuliah jk')
+                           //->join('tb_mata_kuliah mk','mk.MATA_KULIAH_ID = jk.JAM_KULIAH_ID','left')
+                           ->join('tb_mata_kuliah mk','mk.MATA_KULIAH_ID = "'.$matkul_id.'"')
+                           ->join('tb_kelas kls','kls.KELAS_ID = "'.$kelas_id.'"')
+                           ->join('tb_dosen dsn','dsn.DOSEN_ID = "'.$dosen_id.'"')
+                           ->where('jk.JAM_KULIAH_ID',$jam_id)
+                           //->where('mk.MATA_KULIAH_ID',$matkul_id)
+                           ->get();
+                   return $query->row();
+               }
+                       
         function saveJadwal($data)
 	{
 		$this->db->insert('tb_jadwal', $data);

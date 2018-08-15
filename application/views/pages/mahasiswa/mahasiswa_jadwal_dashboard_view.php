@@ -58,7 +58,7 @@
                                             if($hari[$j] != '0')
                                            {    
                                                 
-                                                   
+                                                $items = array('#f56954','#00c0ef','#f39c12','#d2d6de','#00a65a'); 
                                                 $jadwalfix = $this->jadwal_mdl->getJadwalHarianMahasiswa($hari[$j],$user_email,$i);
                                                 //$jadwalfix = $this->jadwal_mdl->getJadwalHarianDosen2($hari[$a],$user_email,$jam['JAM_KULIAH_ID']);
                                                 
@@ -68,30 +68,39 @@
                                                        { 
                                                             if ($hari[$j] == 'senin')
                                                             {
+                                                                
+                                                                                                                               
                                                                 $row_senin = $jad->JAM_MK+$jad->JAM_KULIAH_ID-1;
-                                                                $bar = ' <div class="progress progress-xs"><div class="progress-bar progress-bar-warning bg-maroon" style="width: 100%"></div></div>';
+                                                                $bg_td ='style="background-color:'.$items[array_rand($items,1)].'"';
+                                                                $bar = ' <div class="progress progress-xs"><div class="progress-bar progress-bar-warning bg-maroon" style="width: 100%"></div></div>'.array_rand($items);
                                                             }
                                                             elseif ($hari[$j] == 'selasa')
                                                             {
+                                                                $bg_td ='style="background-color:'.$items[array_rand($items,1)].'"';
                                                                 $row_selasa = $jad->JAM_MK+$jad->JAM_KULIAH_ID-1;
                                                                 $bar = ' <div class="progress progress-xs"><div class="progress-bar progress-bar-warning" style="width: 100%"></div></div>';
                                                             }
                                                             elseif ($hari[$j] == 'rabu')
                                                             {
+                                                                $bg_td ='style="background-color:'.$items[array_rand($items,1)].'"';
                                                                 $row_rabu = $jad->JAM_MK+$jad->JAM_KULIAH_ID-1;
                                                                 $bar = ' <div class="progress progress-xs"><div class="progress-bar progress-bar-success" style="width: 100%"></div></div>';
                                                             }
                                                             elseif ($hari[$j] == 'kamis')
                                                             {
+                                                                $bg_td ='style="background-color:'.$items[array_rand($items,1)].'"';
                                                                 $row_kamis = $jad->JAM_MK+$jad->JAM_KULIAH_ID-1;
                                                                 $bar = ' <div class="progress progress-xs"><div class="progress-bar progress-bar-info" style="width: 100%"></div></div>';
                                                             }
                                                             elseif ($hari[$j] == 'jumat')
                                                             {
+                                                                $bg_td ='style="background-color:'.$items[array_rand($items,1)].'"';
                                                                 $row_jumat = $jad->JAM_MK+$jad->JAM_KULIAH_ID-1;
                                                                 $bar = ' <div class="progress progress-xs"><div class="progress-bar progress-bar-purple" style="width: 100%"></div></div>';
                                                             }
-                                                             echo '<td rowspan="'.$jad->JAM_MK.'" >'.$bar.' <p>'.$jad->KELAS_NAMA.'<br>'.$jad->MATA_KULIAH_NAMA. '<br> R'.$jad->RUANGAN_ID.'<br>'.
+//                                                             echo '<td '.$bg_td.' text-center" rowspan="'.$jad->JAM_MK.'" >'.$bar.' <p>'.$jad->KELAS_NAMA.'<br>'.$jad->MATA_KULIAH_NAMA. '<br> R'.$jad->RUANGAN_ID.'<br>'.
+//                                                           $jad->JAM_MULAI.' - '.(($jad->JAM_JK+$jad->JAM_MK)-1).':45:00</p></th>';
+                                                            echo '<td '.$bg_td.' class="text-center" rowspan="'.$jad->JAM_MK.'" > <p>'.$jad->KELAS_NAMA.'<br>'.$jad->MATA_KULIAH_NAMA. '<br> R'.$jad->RUANGAN_ID.'<br>'.
                                                            $jad->JAM_MULAI.' - '.(($jad->JAM_JK+$jad->JAM_MK)-1).':45:00</p></th>';
                                                              
                                                        }

@@ -67,9 +67,11 @@ $a_label =  array(
 		<h1>
 			Manage Jadwal Kuliah
 		</h1>
+            <a class="btn btn-info btn-lg" id="alert-target" >Click me!</a>
+            
 		<ol class="breadcrumb">
 			<li><a href="#"><i class="fa fa-dashboard"></i> Admin</a></li>
-			<li class="active">Edit Jadwal Kuliah</li>
+			<li class="active">Edit Jadwal Kuliah</li> 
 		</ol>
 	</section>
 

@@ -31,6 +31,25 @@ class Ruangan_model extends CI_Model
 		return $qry2->result();
         }
 
+        function getAvailableRuangan2($hari,$jam)
+	{
+
+		$qry2 = $this->db->query("select r.RUANGAN_ID,r.KETERANGAN from tb_ruangan r
+		  	where r.RUANGAN_ID not in (
+					select jd.ruangan_id
+                         from tb_jadwal jd
+					inner join tb_mata_kuliah mk on jd.MATA_KULIAH_ID = mk.MATA_KULIAH_ID
+					where jd.HARI = '$hari'
+					and $jam between jd.JAM_KULIAH_ID and jd.JAM_KULIAH_ID+mk.JAM-1)");
+                
+//                $query = $this->db->get();
+//                $result = ($query->num_rows() > 0)?$query->result_array():FALSE;
+
+        //return fetched data
+        return $qry2->result_array();
+		//return $qry2->result();
+        }
+        
 	function getAvailableRuangan($hari,$jam)
 	{
 

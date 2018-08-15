@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+error_reporting(0);
 
 class login extends CI_Controller {
 
@@ -43,6 +44,7 @@ class login extends CI_Controller {
 	{
 		$this->session->unset_userdata('logged_in');
 		$this->session->sess_destroy();
-		redirect('login', 'refresh');
+                session_destroy();
+		redirect(base_url(), 'refresh');
 	}
 }
